@@ -1,10 +1,5 @@
 package usama.utech.firebasepractice.AllPostsWork;
 
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.app.ActivityCompat;
-
 import android.Manifest;
 import android.app.AlertDialog;
 import android.content.Context;
@@ -22,8 +17,12 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
-import usama.utech.firebasepractice.R;
+import androidx.core.app.ActivityCompat;
 
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
@@ -49,16 +48,19 @@ import com.karumi.dexter.listener.single.PermissionListener;
 import java.util.List;
 import java.util.Locale;
 
+import usama.utech.firebasepractice.R;
+
 public class Select_location_for_Post extends AppCompatActivity implements OnMapReadyCallback, GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener, com.google.android.gms.location.LocationListener {
 
 
+    private static final String TAG = "MainActivity";
     TextView selectedLOcation;
     Toolbar toolbar;
     Button confirmLocationBtn;
-
+    PlaceAutocompleteFragment autocompleteFragment;
+    LatLng latlng1;
+    double lat, lng;
     private GoogleMap mMap;
-
-    private static final String TAG = "MainActivity";
     private GoogleApiClient mGoogleApiClient;
     private Location mLocation;
     private LocationManager mLocationManager;
@@ -66,21 +68,17 @@ public class Select_location_for_Post extends AppCompatActivity implements OnMap
     private com.google.android.gms.location.LocationListener listener;
     private long UPDATE_INTERVAL = 2 * 1000;  /* 10 secs */
     private long FASTEST_INTERVAL = 20000; /* 20 sec */
-
     private LocationManager locationManager;
     private LatLng latLng;
     private boolean isPermission;
-    PlaceAutocompleteFragment autocompleteFragment;
-    LatLng latlng1;
-    double lat,lng;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_select_location_for__post);
 
-        toolbar = (androidx.appcompat.widget.Toolbar)findViewById(R.id.my_toolbar);
-        autocompleteFragment = (PlaceAutocompleteFragment)getFragmentManager().findFragmentById(R.id.autocomplete_fragment);
+        toolbar = (androidx.appcompat.widget.Toolbar) findViewById(R.id.my_toolbar);
+        autocompleteFragment = (PlaceAutocompleteFragment) getFragmentManager().findFragmentById(R.id.autocomplete_fragment);
 
 
         selectedLOcation = findViewById(R.id.endPointTx);
@@ -89,17 +87,13 @@ public class Select_location_for_Post extends AppCompatActivity implements OnMap
             toolbar.setTitle("Start Point");
             toolbar.setSubtitle("Tap on the map to select the Location");
             confirmLocationBtn.setText("Confirm Start Point");
-        }else if (getIntent().getStringExtra("start").equals("end")){
+        } else if (getIntent().getStringExtra("start").equals("end")) {
             toolbar.setTitle("End Point");
             toolbar.setSubtitle("Tap on the map to select the Location");
             confirmLocationBtn.setText("Confirm End Point");
 
         }
         setSupportActionBar(toolbar);
-
-
-
-
 
 
 //        if (getIntent().getStringExtra("isEndPoint").equals("end")) {
@@ -138,17 +132,17 @@ public class Select_location_for_Post extends AppCompatActivity implements OnMap
         confirmLocationBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                
+
                 if (!selectedLOcation.getText().toString().equals("Loading ..")) {
 
                     if (getIntent().getStringExtra("start").equals("start")) {
                         Intent intent = new Intent(getApplicationContext(), PostYourTravel.class);
 
-                        System.err.println("my ad"+selectedLOcation.getText().toString()+" loct = "+latLng.latitude);
+                        System.err.println("my ad" + selectedLOcation.getText().toString() + " loct = " + latLng.latitude);
 
                         intent.putExtra("locationtxt", selectedLOcation.getText().toString() + "");
-                        intent.putExtra("latstart",lat+"");
-                        intent.putExtra("lngstart",lng+"");
+                        intent.putExtra("latstart", lat + "");
+                        intent.putExtra("lngstart", lng + "");
 
                         setResult(2, intent);
                         finish();
@@ -158,13 +152,13 @@ public class Select_location_for_Post extends AppCompatActivity implements OnMap
 
 
                         intent.putExtra("locationtxt", selectedLOcation.getText().toString() + "");
-                        intent.putExtra("latend",lat+"");
-                        intent.putExtra("lngend",lng+"");
+                        intent.putExtra("latend", lat + "");
+                        intent.putExtra("lngend", lng + "");
 
                         setResult(3, intent);
                         finish();
                     }
-                }else{
+                } else {
                     Toast.makeText(Select_location_for_Post.this, "select a location", Toast.LENGTH_SHORT).show();
                 }
             }
@@ -183,19 +177,19 @@ public class Select_location_for_Post extends AppCompatActivity implements OnMap
                 selectedLOcation.setText(place.getName());
 
             }
+
             @Override
             public void onError(Status status) {
-                Toast.makeText(Select_location_for_Post.this, ""+status.toString(), Toast.LENGTH_SHORT).show();
+                Toast.makeText(Select_location_for_Post.this, "" + status.toString(), Toast.LENGTH_SHORT).show();
             }
         });
 
 
-        AutocompleteFilter filter= new AutocompleteFilter.Builder()
+        AutocompleteFilter filter = new AutocompleteFilter.Builder()
                 .setCountry("PK")
                 .build();
 
         autocompleteFragment.setFilter(filter);
-
 
 
     }
@@ -214,7 +208,7 @@ public class Select_location_for_Post extends AppCompatActivity implements OnMap
         mMap.getUiSettings().setZoomControlsEnabled(true);
 
         if (latLng != null) {
-         //   mMap.clear();
+            //   mMap.clear();
             //  mMap.addMarker(new MarkerOptions().position(latLng).title("Your Current Location").icon(BitmapDescriptorFactory.fromResource(R.drawable.navigation)));
 //            CameraPosition cameraPosition = new CameraPosition.Builder().target(latLng).zoom(15.0f).build();
 //            CameraUpdate cameraUpdate = CameraUpdateFactory.newCameraPosition(cameraPosition);
@@ -246,19 +240,16 @@ public class Select_location_for_Post extends AppCompatActivity implements OnMap
                         .title("Your Selected Location"));
 
 
-                System.err.println("your address is "+getCompleteAddressString(latLng2.latitude,latLng2.longitude));
+                System.err.println("your address is " + getCompleteAddressString(latLng2.latitude, latLng2.longitude));
 
-                selectedLOcation.setText(getCompleteAddressString(latLng2.latitude,latLng2.longitude));
+                selectedLOcation.setText(getCompleteAddressString(latLng2.latitude, latLng2.longitude));
 
                 lat = latLng2.latitude;
                 lng = latLng2.longitude;
 
 
-
             }
         });
-
-
 
 
     }
@@ -340,10 +331,7 @@ public class Select_location_for_Post extends AppCompatActivity implements OnMap
         mapFragment.getMapAsync(this);
 
 
-
-
     }
-
 
 
     protected void startLocationUpdates() {
@@ -420,7 +408,7 @@ public class Select_location_for_Post extends AppCompatActivity implements OnMap
 
     @Override
     public void onBackPressed() {
-        startActivity(new Intent(getApplicationContext(),PostYourTravel.class));
+        startActivity(new Intent(getApplicationContext(), PostYourTravel.class));
         finish();
     }
 
@@ -436,7 +424,6 @@ public class Select_location_for_Post extends AppCompatActivity implements OnMap
                         isPermission = true;
 
 
-
                     }
 
                     @Override
@@ -444,7 +431,6 @@ public class Select_location_for_Post extends AppCompatActivity implements OnMap
                         // check for permanent denial of permission
                         if (response.isPermanentlyDenied()) {
                             isPermission = false;
-
 
 
                         }

@@ -26,6 +26,10 @@
         </item>
     </style>
 
+    <style name="MenuStyle" parent="Theme.AppCompat.Light">
+        <item name="android:background">@android:color/white</item>
+    </style>
+
     <style name="toolBarTheme" parent="@style/ThemeOverlay.AppCompat.Dark.ActionBar">
         <item name="colorPrimary">@color/myapp_green_color</item>
     </style>

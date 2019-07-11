@@ -2,7 +2,7 @@ package usama.utech.firebasepractice.ModelClasses;
 
 public class PostDriver {
 
-    String departuredatetime,phoneno,fareamount, endpoint, fullname, id, latend, latstart, lngend, lngstart, noofpassenger, offermessage, profileimgurl, regulartrip, roundtrip, startpoint, uid, vehicaltype;
+    String departuredatetime, phoneno, fareamount, endpoint, fullname, id, latend, latstart, lngend, lngstart, noofpassenger, offermessage, profileimgurl, regulartrip, roundtrip, startpoint, uid, vehicaltype;
 
 
     public PostDriver() {

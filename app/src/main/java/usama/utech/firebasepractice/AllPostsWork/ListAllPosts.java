@@ -4,12 +4,13 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.widget.Toast;
 
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.viewpager.widget.ViewPager;
+
 import com.ogaclejapan.smarttablayout.SmartTabLayout;
 import com.ogaclejapan.smarttablayout.utils.v4.FragmentPagerItemAdapter;
 import com.ogaclejapan.smarttablayout.utils.v4.FragmentPagerItems;
 
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.viewpager.widget.ViewPager;
 import usama.utech.firebasepractice.Fragments.ListAllPostsDriver;
 import usama.utech.firebasepractice.Fragments.ListAllPostsRider;
 import usama.utech.firebasepractice.R;
@@ -39,7 +40,7 @@ public class ListAllPosts extends AppCompatActivity implements
         viewPagerTab.setOnPageChangeListener(new ViewPager.OnPageChangeListener() {
             @Override
             public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
-                Toast.makeText(ListAllPosts.this, "Changed to "+position, Toast.LENGTH_SHORT).show();
+                Toast.makeText(ListAllPosts.this, "Changed to " + position, Toast.LENGTH_SHORT).show();
             }
 
             @Override

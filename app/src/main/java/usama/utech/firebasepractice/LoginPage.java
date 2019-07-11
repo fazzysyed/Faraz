@@ -6,9 +6,6 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
-import androidx.annotation.NonNull;
-import androidx.appcompat.app.AlertDialog;
-import androidx.appcompat.app.AppCompatActivity;
 import android.text.InputType;
 import android.util.Log;
 import android.view.MenuItem;
@@ -18,6 +15,10 @@ import android.widget.EditText;
 import android.widget.PopupMenu;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AlertDialog;
+import androidx.appcompat.app.AppCompatActivity;
 
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
@@ -42,16 +43,15 @@ public class LoginPage extends AppCompatActivity {
 
 
     private static final String TAG = "LoginActivity";
-    public int test = 9;
     private static final int REQUEST_SIGNUP = 0;
+    public int test = 9;
     FirebaseDatabase database;
     DatabaseReference myRef;
-    private FirebaseAuth mAuth;
-
     EditText emailText;
     EditText passwordText;
-    Button loginButton,signupButton;
-    TextView  resetpass;
+    Button loginButton, signupButton;
+    TextView resetpass;
+    private FirebaseAuth mAuth;
     private boolean isPermission = false;
     private boolean isDriver;
 
@@ -68,10 +68,10 @@ public class LoginPage extends AppCompatActivity {
         SharedPreferences prefs = getSharedPreferences("saveddata", MODE_PRIVATE);
         String restoredText = prefs.getString("isLogedin", "false");
 
-        if (restoredText.equals("true") && mAuth != null){
+        if (restoredText.equals("true") && mAuth != null) {
 
             startActivity(new Intent(getApplicationContext(), HomePageMap.class));
-        finish();
+            finish();
         }
 
         // Write a message to the database
@@ -83,8 +83,8 @@ public class LoginPage extends AppCompatActivity {
         loginButton = findViewById(R.id.loginBtn);
         signupButton = findViewById(R.id.signup);
 
-        if (!requestPermission()){
-          requestPermission();
+        if (!requestPermission()) {
+            requestPermission();
         }
 
         resetpass.setOnClickListener(new View.OnClickListener() {
@@ -146,12 +146,12 @@ public class LoginPage extends AppCompatActivity {
 
                         switch (item.getTitle().toString()) {
                             case "Login As Driver":
-                                isDriver=true;
-                               login();
+                                isDriver = true;
+                                login();
                                 break;
 
                             case "Login As Passenger":
-                                isDriver=false;
+                                isDriver = false;
                                 login();
                                 break;
 
@@ -190,36 +190,35 @@ public class LoginPage extends AppCompatActivity {
                         Manifest.permission.WRITE_EXTERNAL_STORAGE,
                         Manifest.permission.CALL_PHONE
                 ).withListener(new MultiplePermissionsListener() {
-            @Override public void onPermissionsChecked(MultiplePermissionsReport report) {
+            @Override
+            public void onPermissionsChecked(MultiplePermissionsReport report) {
 
-           if (report.isAnyPermissionPermanentlyDenied()){
-               final android.app.AlertDialog.Builder dialog = new android.app.AlertDialog.Builder(LoginPage.this);
-               dialog.setTitle("Location Permission")
-                       .setMessage("You have to give location permission!!, the app will close now")
+                if (report.isAnyPermissionPermanentlyDenied()) {
+                    final android.app.AlertDialog.Builder dialog = new android.app.AlertDialog.Builder(LoginPage.this);
+                    dialog.setTitle("Location Permission")
+                            .setMessage("You have to give location permission!!, the app will close now")
 
-                       .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
-                           @Override
-                           public void onClick(DialogInterface paramDialogInterface, int paramInt) {
-                               finishAffinity();
-                           }
-                       });
-               dialog.setCancelable(false);
-               dialog.show();
-           }else {
-               isPermission = true;
-           }
+                            .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface paramDialogInterface, int paramInt) {
+                                    finishAffinity();
+                                }
+                            });
+                    dialog.setCancelable(false);
+                    dialog.show();
+                } else {
+                    isPermission = true;
+                }
             }
-            @Override public void onPermissionRationaleShouldBeShown(List<PermissionRequest> permissions, PermissionToken token) {
+
+            @Override
+            public void onPermissionRationaleShouldBeShown(List<PermissionRequest> permissions, PermissionToken token) {
                 token.continuePermissionRequest();
             }
         }).check();
 
         return isPermission;
     }
-
-
-
-
 
 
     public void login() {
@@ -243,7 +242,6 @@ public class LoginPage extends AppCompatActivity {
         String password = passwordText.getText().toString();
 
 
-
         mAuth.signInWithEmailAndPassword(email, password)
                 .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
                     @Override
@@ -252,10 +250,10 @@ public class LoginPage extends AppCompatActivity {
 
                             FirebaseUser user = mAuth.getCurrentUser();
 
-                            if (isDriver){
+                            if (isDriver) {
                                 myRef = database.getReference("Drivers");
 
-                            }else{
+                            } else {
                                 myRef = database.getReference("Riders");
 
                             }
@@ -275,7 +273,6 @@ public class LoginPage extends AppCompatActivity {
                                         }
 
 
-
                                         SharedPreferences.Editor editor = getSharedPreferences("saveddata", MODE_PRIVATE).edit();
                                         editor.putString("currentlogitude", datas.child("currentlogitude").getValue().toString());
                                         editor.putString("currentlatitude", datas.child("currentlatitude").getValue().toString());
@@ -290,13 +287,13 @@ public class LoginPage extends AppCompatActivity {
                                             editor.putString("vehicalname", datas.child("vehicalname").getValue().toString());
                                             editor.putString("vehicalnoplate", datas.child("vehicalnoplate").getValue().toString());
 
-                                        }else{
+                                        } else {
                                             editor.putString("type", "rider");
 
                                         }
 
                                         editor.putString("profileimageurl", datas.child("profileimageurl").getValue().toString());
-                                         editor.putString("fullname", datas.child("fullname").getValue().toString());
+                                        editor.putString("fullname", datas.child("fullname").getValue().toString());
                                         editor.putString("cnicno", datas.child("cnicno").getValue().toString());
                                         editor.putString("phoneno", datas.child("phoneno").getValue().toString());
                                         editor.putString("provence", datas.child("provence").getValue().toString());
@@ -351,7 +348,6 @@ public class LoginPage extends AppCompatActivity {
             }
         }
     }
-
 
 
     public void onLoginSuccess() {

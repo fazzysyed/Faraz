@@ -49,14 +49,14 @@ import com.google.android.material.bottomappbar.BottomAppBar;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.navigation.NavigationView;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.karumi.dexter.Dexter;
+import com.karumi.dexter.MultiplePermissionsReport;
 import com.karumi.dexter.PermissionToken;
-import com.karumi.dexter.listener.PermissionDeniedResponse;
-import com.karumi.dexter.listener.PermissionGrantedResponse;
 import com.karumi.dexter.listener.PermissionRequest;
-import com.karumi.dexter.listener.single.PermissionListener;
+import com.karumi.dexter.listener.multi.MultiplePermissionsListener;
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
@@ -66,40 +66,30 @@ import java.util.Locale;
 
 import usama.utech.firebasepractice.AllPostsWork.ListAllPosts;
 import usama.utech.firebasepractice.AllPostsWork.PostYourTravel;
+import usama.utech.firebasepractice.ChatStuff.MainActivity;
 import usama.utech.firebasepractice.ModelClasses.User;
 import usama.utech.firebasepractice.ProfilePageStuff.ProfilePage;
 
 public class HomePageMap extends AppCompatActivity implements OnMapReadyCallback, GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener, LocationListener, NavigationView.OnNavigationItemSelectedListener {
 
 
+    private static final String TAG = "MainActivity";
+    FloatingActionButton fab_homepage;
+    ///navigasstion
+    ImageView ImageViewNav;
+    TextView EmailUserTxt, TypeUserTxt;
+    String photo_url_user, email_user, type_user;
+    ArrayList<User> data = new ArrayList<>();
+    BottomAppBar bottomapp;
+    FirebaseDatabase database;
+    DatabaseReference myRef;
     private EditText name;
     private EditText age;
     private Button addData;
     private Button getData;
     private RecyclerView showDataTxt;
-
-    FloatingActionButton fab_homepage;
-
-
-    ///navigasstion
-    ImageView ImageViewNav;
-    TextView EmailUserTxt, TypeUserTxt;
-
-    String photo_url_user, email_user, type_user;
-
-
-    ArrayList<User> data = new ArrayList<>();
-
-    BottomAppBar bottomapp;
-
-    FirebaseDatabase database;
-    DatabaseReference myRef;
-
     private FirebaseAuth mAuth;
-
     private GoogleMap mMap;
-
-    private static final String TAG = "MainActivity";
     private GoogleApiClient mGoogleApiClient;
     private Location mLocation;
     private LocationManager mLocationManager;
@@ -112,7 +102,10 @@ public class HomePageMap extends AppCompatActivity implements OnMapReadyCallback
     private LatLng latLng;
     private boolean isPermission;
     private DrawerLayout drawer;
+    private DatabaseReference reference;
 
+    FirebaseUser fuser;
+    private String uid;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -127,6 +120,9 @@ public class HomePageMap extends AppCompatActivity implements OnMapReadyCallback
 
         setSupportActionBar(bottomapp);
 
+        if (FirebaseAuth.getInstance().getCurrentUser() != null) {
+            fuser = FirebaseAuth.getInstance().getCurrentUser();
+        }
 
         // Write a message to the database
         database = FirebaseDatabase.getInstance();
@@ -404,6 +400,11 @@ public class HomePageMap extends AppCompatActivity implements OnMapReadyCallback
         if (mGoogleApiClient.isConnected()) {
             mGoogleApiClient.disconnect();
         }
+
+
+        status("false");
+        currentUser("none");
+
     }
 
     private boolean checkLocation() {
@@ -442,45 +443,93 @@ public class HomePageMap extends AppCompatActivity implements OnMapReadyCallback
 
     private boolean requestSinglePermission() {
 
+//        Dexter.withActivity(this)
+//                .withPermission(Manifest.permission.ACCESS_FINE_LOCATION)
+//                .withListener(new PermissionListener() {
+//                    @Override
+//                    public void onPermissionGranted(PermissionGrantedResponse response) {
+//                        //Single Permission is granted
+//                        Toast.makeText(getApplicationContext(), "Single permission is granted!", Toast.LENGTH_SHORT).show();
+//                        isPermission = true;
+//
+//
+//                    }
+//
+//                    @Override
+//                    public void onPermissionDenied(PermissionDeniedResponse response) {
+//                        // check for permanent denial of permission
+//                        if (response.isPermanentlyDenied()) {
+//                            isPermission = false;
+//
+//
+//                        }
+//                        final AlertDialog.Builder dialog = new AlertDialog.Builder(HomePageMap.this);
+//                        dialog.setTitle("Location Permission")
+//                                .setMessage("You have to give location permission!!, the app will close now")
+//
+//                                .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+//                                    @Override
+//                                    public void onClick(DialogInterface paramDialogInterface, int paramInt) {
+//                                        finishAffinity();
+//                                    }
+//                                });
+//                        dialog.setCancelable(false);
+//                        dialog.show();
+//                    }
+//
+//                    @Override
+//                    public void onPermissionRationaleShouldBeShown(PermissionRequest permission, PermissionToken token) {
+//                        token.continuePermissionRequest();
+//                    }
+//                }).check();
+
+
         Dexter.withActivity(this)
-                .withPermission(Manifest.permission.ACCESS_FINE_LOCATION)
-                .withListener(new PermissionListener() {
-                    @Override
-                    public void onPermissionGranted(PermissionGrantedResponse response) {
-                        //Single Permission is granted
-                        Toast.makeText(getApplicationContext(), "Single permission is granted!", Toast.LENGTH_SHORT).show();
-                        isPermission = true;
+                .withPermissions(
+                        Manifest.permission.CAMERA,
+                        Manifest.permission.ACCESS_FINE_LOCATION,
+                        Manifest.permission.RECORD_AUDIO,
+                        Manifest.permission.CALL_PHONE
+                ).withListener(new MultiplePermissionsListener() {
+            @Override
+            public void onPermissionsChecked(MultiplePermissionsReport report) {
+
+                if (report.isAnyPermissionPermanentlyDenied()) {
+                    // check for permanent denial of permission
+
+                    isPermission = false;
 
 
-                    }
+                    final AlertDialog.Builder dialog = new AlertDialog.Builder(HomePageMap.this);
+                    dialog.setTitle("Permissions")
+                            .setMessage("You have to give all permissions!!, the app will close now")
 
-                    @Override
-                    public void onPermissionDenied(PermissionDeniedResponse response) {
-                        // check for permanent denial of permission
-                        if (response.isPermanentlyDenied()) {
-                            isPermission = false;
+                            .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface paramDialogInterface, int paramInt) {
+                                    finishAffinity();
+                                }
+                            });
+                    dialog.setCancelable(false);
+                    dialog.show();
+
+                } else if (report.areAllPermissionsGranted()) {
+
+                    //Single Permission is granted
+                    Toast.makeText(getApplicationContext(), "permissions are granted!", Toast.LENGTH_SHORT).show();
+                    isPermission = true;
+
+                }
 
 
-                        }
-                        final AlertDialog.Builder dialog = new AlertDialog.Builder(HomePageMap.this);
-                        dialog.setTitle("Location Permission")
-                                .setMessage("You have to give location permission!!, the app will close now")
+            }
 
-                                .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
-                                    @Override
-                                    public void onClick(DialogInterface paramDialogInterface, int paramInt) {
-                                        finishAffinity();
-                                    }
-                                });
-                        dialog.setCancelable(false);
-                        dialog.show();
-                    }
+            @Override
+            public void onPermissionRationaleShouldBeShown(List<PermissionRequest> permissions, PermissionToken token) {
 
-                    @Override
-                    public void onPermissionRationaleShouldBeShown(PermissionRequest permission, PermissionToken token) {
-                        token.continuePermissionRequest();
-                    }
-                }).check();
+            }
+        }).check();
+
 
         return isPermission;
 
@@ -530,8 +579,8 @@ public class HomePageMap extends AppCompatActivity implements OnMapReadyCallback
             startActivity(new Intent(getApplicationContext(), PostYourTravel.class));
             finish();
 
-        } else if (id == R.id.profilesettingMenu) {
-            Toast.makeText(this, "profilesettingMenu", Toast.LENGTH_SHORT).show();
+        } else if (id == R.id.messangerMenue) {
+            startActivity(new Intent(HomePageMap.this, MainActivity.class));
 
         } else if (id == R.id.contactMenu) {
             Toast.makeText(this, "contactMenu", Toast.LENGTH_SHORT).show();
@@ -592,5 +641,53 @@ public class HomePageMap extends AppCompatActivity implements OnMapReadyCallback
         return true;
     }
 
+
+    private void status(String status) {
+
+        if (type_user.equals("driver")) {
+
+            reference = FirebaseDatabase.getInstance().getReference("Drivers").child(fuser.getUid());
+
+            HashMap<String, Object> hashMap = new HashMap<>();
+            hashMap.put("online", status);
+
+            reference.updateChildren(hashMap);
+
+
+        } else if (type_user.equals("rider")) {
+            reference = FirebaseDatabase.getInstance().getReference("Riders").child(fuser.getUid());
+
+            HashMap<String, Object> hashMap = new HashMap<>();
+            hashMap.put("online", status);
+
+            reference.updateChildren(hashMap);
+        }
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        status("true");
+        currentUser(fuser.getUid());
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+
+        status("false");
+        currentUser("none");
+    }
+
+    private void currentUser(String userid) {
+        SharedPreferences prefs = getSharedPreferences("saveddata", MODE_PRIVATE);
+
+        uid = prefs.getString("uid", "");
+
+
+        SharedPreferences.Editor editor = getSharedPreferences("PREFS", MODE_PRIVATE).edit();
+        editor.putString("currentuser", userid);
+        editor.apply();
+    }
 
 }

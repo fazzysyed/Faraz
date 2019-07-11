@@ -9,7 +9,6 @@ import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
-import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ArrayAdapter;
@@ -19,10 +18,11 @@ import android.widget.PopupMenu;
 import android.widget.Spinner;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
+
 import com.google.android.gms.tasks.Continuation;
 import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.OnFailureListener;
-import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.FirebaseApp;
 import com.google.firebase.auth.AuthResult;
@@ -37,30 +37,21 @@ import com.google.firebase.storage.UploadTask;
 import java.io.File;
 import java.util.HashMap;
 
-import androidx.annotation.NonNull;
-import androidx.appcompat.app.AppCompatActivity;
-import usama.utech.firebasepractice.Bitmap.BitmapConversion;
-
 public class SignupPageContinueAsDriver extends AppCompatActivity {
 
 
+    private static final int PICK_FROM_CAMERA = 1;
+    private static final int PICK_FROM_GALLARY = 2;
     FirebaseDatabase database;
     FirebaseUser user;
     DatabaseReference myRef;
-    private FirebaseAuth mAuth;
-    private StorageReference mStorageRef;
-
     Spinner genderSpinner, vehecaleType;
     ImageView selectImageV;
-
-    private static final int PICK_FROM_CAMERA = 1;
-    private static final int PICK_FROM_GALLARY = 2;
-
-
     String firstName, lastName, cnicSignup, phonenoSignup, signupProvence, signupCity, emailText, passwordTxt;
     String selectedImgURI = "";
-
     HashMap<String, String> map = new HashMap<>();
+    private FirebaseAuth mAuth;
+    private StorageReference mStorageRef;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -86,7 +77,7 @@ public class SignupPageContinueAsDriver extends AppCompatActivity {
         ArrayAdapter<String> genadapter = new ArrayAdapter<>(SignupPageContinueAsDriver.this, R.layout.custom_spinner_layout, genderdata);
         genadapter.setDropDownViewResource(R.layout.support_simple_spinner_dropdown_item);
 
-        String[] vehicaldata = {"Car", "Bike", "Jeep", "Van","Other"};
+        String[] vehicaldata = {"Car", "Bike", "Jeep", "Van", "Other"};
 
         ArrayAdapter<String> vehicaladapter = new ArrayAdapter<>(SignupPageContinueAsDriver.this, R.layout.custom_spinner_layout, vehicaldata);
         vehicaladapter.setDropDownViewResource(R.layout.support_simple_spinner_dropdown_item);
@@ -129,7 +120,7 @@ public class SignupPageContinueAsDriver extends AppCompatActivity {
         findViewById(R.id.signupBtnContDriver).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-              signup();
+                signup();
             }
         });
 
@@ -173,16 +164,10 @@ public class SignupPageContinueAsDriver extends AppCompatActivity {
             if (password.equals(reEnterPassword)) {
 
 
-
-
-
-
-
                 Uri file = Uri.fromFile(new File(selectedImgURI));
-                System.out.println("file path "+file.toString());
+                System.out.println("file path " + file.toString());
 
                 final StorageReference riversRef = mStorageRef.child("profileimages/" + email);
-
 
 
                 UploadTask uploadTask = riversRef.putFile(file);
@@ -223,9 +208,7 @@ public class SignupPageContinueAsDriver extends AppCompatActivity {
                                                     myRef = database.getReference("Drivers");
 
 
-                                                 DatabaseReference pushref = myRef.child(user.getUid());
-
-
+                                                    DatabaseReference pushref = myRef.child(user.getUid());
 
 
                                                     String imageStringLink = downloadUri.toString(); //YOU WILL GET THE DOWNLOAD URL HERE !!!!
@@ -259,9 +242,6 @@ public class SignupPageContinueAsDriver extends AppCompatActivity {
                                                     map.put("locationsharing", "true");
 
 
-
-
-
                                                     pushref.setValue(map).addOnCompleteListener(new OnCompleteListener<Void>() {
                                                         @Override
                                                         public void onComplete(@NonNull Task<Void> task) {
@@ -279,8 +259,6 @@ public class SignupPageContinueAsDriver extends AppCompatActivity {
                                                     });
 
 
-
-
                                                 } else {
                                                     // If sign in fails, display a message to the user.
                                                     Toast.makeText(SignupPageContinueAsDriver.this, "User Creation failed.",
@@ -295,9 +273,6 @@ public class SignupPageContinueAsDriver extends AppCompatActivity {
                                         });
 
 
-
-
-
                             }
 
                         } else {
@@ -309,12 +284,6 @@ public class SignupPageContinueAsDriver extends AppCompatActivity {
                 });
 
 
-
-
-
-
-
-
             } else {
                 Toast.makeText(this, "Password Not Matching!", Toast.LENGTH_SHORT).show();
             }
@@ -323,7 +292,6 @@ public class SignupPageContinueAsDriver extends AppCompatActivity {
         }
 
     }
-
 
 
     public void get_gallery_image() {
@@ -376,7 +344,7 @@ public class SignupPageContinueAsDriver extends AppCompatActivity {
 
                     selectedImgURI = data.getDataString();
 
-                    System.err.println("path "+selectedImgURI);
+                    System.err.println("path " + selectedImgURI);
                 }
                 break;
             }
@@ -384,7 +352,7 @@ public class SignupPageContinueAsDriver extends AppCompatActivity {
 
                 if (requestCode == PICK_FROM_GALLARY && resultCode == RESULT_OK && null != data) {
                     Uri selectedImage = data.getData();
-                    String[] filePathColumn = { MediaStore.Images.Media.DATA };
+                    String[] filePathColumn = {MediaStore.Images.Media.DATA};
 
                     Cursor cursor = getContentResolver().query(selectedImage,
                             filePathColumn, null, null, null);
@@ -397,7 +365,7 @@ public class SignupPageContinueAsDriver extends AppCompatActivity {
                     cursor.close();
 
                     selectedImgURI = picturePath;
-                    System.err.println("path "+picturePath);
+                    System.err.println("path " + picturePath);
 
                 }
 

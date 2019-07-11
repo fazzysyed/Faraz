@@ -1,9 +1,5 @@
 package usama.utech.firebasepractice.ProfilePageStuff;
 
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.widget.Toolbar;
-import androidx.viewpager.widget.ViewPager;
-
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.net.Uri;
@@ -12,6 +8,9 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
+import androidx.viewpager.widget.ViewPager;
 
 import com.google.android.material.appbar.AppBarLayout;
 import com.google.android.material.appbar.CollapsingToolbarLayout;
@@ -21,25 +20,22 @@ import com.ogaclejapan.smarttablayout.utils.v4.FragmentPagerItemAdapter;
 import com.ogaclejapan.smarttablayout.utils.v4.FragmentPagerItems;
 import com.squareup.picasso.Picasso;
 
-
 import usama.utech.firebasepractice.HomePageMap;
 import usama.utech.firebasepractice.R;
 
 public class ProfilePage extends AppCompatActivity implements
         MySentRequests.OnFragmentInteractionListener,
-        MyAddedPosts.OnFragmentInteractionListener{
-
-
+        MyAddedPosts.OnFragmentInteractionListener,
+        RecivedRequests.OnFragmentInteractionListener {
 
 
     CircularImageView circularImageView;
     CollapsingToolbarLayout collapsingToolbarLayout;
     Toolbar app_toolbar;
     AppBarLayout appBarLayout;
-    private String email_user,type_user,photo_url_user,fullname_user;
-    private ImageView ImageViewNav,main_image;
-TextView UserNameTxt,TypeUserTxt,EmailUserTxt;
-
+    TextView UserNameTxt, TypeUserTxt, EmailUserTxt;
+    private String email_user, type_user, photo_url_user, fullname_user;
+    private ImageView ImageViewNav, main_image;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -48,7 +44,7 @@ TextView UserNameTxt,TypeUserTxt,EmailUserTxt;
 
 
         circularImageView = (CircularImageView) findViewById(R.id.image);
-        collapsingToolbarLayout  = (CollapsingToolbarLayout) findViewById(R.id.collapsing_toolbar);
+        collapsingToolbarLayout = (CollapsingToolbarLayout) findViewById(R.id.collapsing_toolbar);
 
         app_toolbar = (Toolbar) findViewById(R.id.toolbar);
         appBarLayout = (AppBarLayout) findViewById(R.id.app_bar_layout);
@@ -59,13 +55,11 @@ TextView UserNameTxt,TypeUserTxt,EmailUserTxt;
         setSupportActionBar(app_toolbar);
 
 
-
-
         appBarLayout.addOnOffsetChangedListener(new AppBarLayout.OnOffsetChangedListener() {
             @Override
             public void onOffsetChanged(AppBarLayout appBarLayout, int i) {
 
-                int j = collapsingToolbarLayout.getExpandedTitleMarginTop()*2;
+                int j = collapsingToolbarLayout.getExpandedTitleMarginTop() * 2;
 
 
                 float f = ((float) (i + j)) / ((float) j);
@@ -79,13 +73,11 @@ TextView UserNameTxt,TypeUserTxt,EmailUserTxt;
         });
 
 
-
-
-
         FragmentPagerItemAdapter adapter = new FragmentPagerItemAdapter(
                 getSupportFragmentManager(), FragmentPagerItems.with(this)
                 .add("My Posts", MyAddedPosts.class)
                 .add("My Requests", MySentRequests.class)
+                .add("Recived Requests", RecivedRequests.class)
                 .create());
 
         ViewPager viewPager = (ViewPager) findViewById(R.id.viewpager_profilepage);
@@ -96,7 +88,7 @@ TextView UserNameTxt,TypeUserTxt,EmailUserTxt;
         viewPagerTab.setOnPageChangeListener(new ViewPager.OnPageChangeListener() {
             @Override
             public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
-                Toast.makeText(ProfilePage.this, "Changed to "+position, Toast.LENGTH_SHORT).show();
+                Toast.makeText(ProfilePage.this, "Changed to " + position, Toast.LENGTH_SHORT).show();
             }
 
             @Override
@@ -111,8 +103,6 @@ TextView UserNameTxt,TypeUserTxt,EmailUserTxt;
         });
 
 
-
-
         SharedPreferences prefs = getSharedPreferences("saveddata", MODE_PRIVATE);
         photo_url_user = prefs.getString("profileimageurl", "");
         email_user = prefs.getString("email", "");
@@ -120,11 +110,11 @@ TextView UserNameTxt,TypeUserTxt,EmailUserTxt;
         fullname_user = prefs.getString("fullname", "");
 
 
-        ImageViewNav = (ImageView)findViewById(R.id.image_header);
-        main_image = (ImageView)findViewById(R.id.image);
+        ImageViewNav = (ImageView) findViewById(R.id.image_header);
+        main_image = (ImageView) findViewById(R.id.image);
         UserNameTxt = (TextView) findViewById(R.id.name_txt_profile);
-        TypeUserTxt = (TextView)findViewById(R.id.type_txt_profie);
-        EmailUserTxt = (TextView)findViewById(R.id.email_txt_profie);
+        TypeUserTxt = (TextView) findViewById(R.id.type_txt_profie);
+        EmailUserTxt = (TextView) findViewById(R.id.email_txt_profie);
 
         if (type_user.equals("rider")) {
 
@@ -143,9 +133,6 @@ TextView UserNameTxt,TypeUserTxt,EmailUserTxt;
                     .placeholder(R.drawable.ic_launcher_background)
                     .error(R.drawable.ic_launcher_background)
                     .into(main_image);
-
-
-
 
 
         } else if (type_user.equals("driver")) {
@@ -167,9 +154,7 @@ TextView UserNameTxt,TypeUserTxt,EmailUserTxt;
                     .into(main_image);
 
 
-
         }
-
 
 
     }

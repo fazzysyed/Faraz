@@ -32,12 +32,12 @@ import static android.content.Context.MODE_PRIVATE;
 
 public class MyAddedPosts extends Fragment {
 
-    private OnFragmentInteractionListener mListener;
-    private RecyclerView recyclerView;
     String currentUserUid;
-    private DatabaseReference myRef;
     PostAdapter postAdapter;
     ArrayList<PostDriver> postDriverArrayList = new ArrayList<>();
+    private OnFragmentInteractionListener mListener;
+    private RecyclerView recyclerView;
+    private DatabaseReference myRef;
     private ArrayList<PostRider> listrider = new ArrayList<>();
     private String type;
 
@@ -76,21 +76,19 @@ public class MyAddedPosts extends Fragment {
                     listrider.add(new PostRider("", "", "", "", "", "", "", "", "", "", "", "", "", ""));
 
 
-                   PostDriver value = dataSnap.getValue(PostDriver.class);
+                    PostDriver value = dataSnap.getValue(PostDriver.class);
 
-                        if (currentUserUid.equals(value.getUid())) {
-                            postDriverArrayList.add(value);
-                            postAdapter.notifyDataSetChanged();
+                    if (currentUserUid.equals(value.getUid())) {
+                        postDriverArrayList.add(value);
+                        postAdapter.notifyDataSetChanged();
 
-                            System.err.println("driver is " + value.getFullname());
-
-                        }
-
-                        System.err.println("driver oput is " + value.getFullname());
+                        System.err.println("driver is " + value.getFullname());
 
                     }
 
+                    System.err.println("driver oput is " + value.getFullname());
 
+                }
 
 
                 @Override

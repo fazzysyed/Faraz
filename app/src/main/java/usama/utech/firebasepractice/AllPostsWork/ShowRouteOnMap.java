@@ -3,6 +3,8 @@ package usama.utech.firebasepractice.AllPostsWork;
 import android.os.Bundle;
 import android.widget.Toast;
 
+import androidx.fragment.app.FragmentActivity;
+
 import com.directions.route.Route;
 import com.directions.route.RouteException;
 import com.directions.route.Routing;
@@ -12,7 +14,6 @@ import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
-import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
@@ -22,19 +23,15 @@ import com.google.android.gms.maps.model.PolylineOptions;
 import java.util.ArrayList;
 import java.util.List;
 
-import androidx.fragment.app.FragmentActivity;
 import usama.utech.firebasepractice.R;
 
 public class ShowRouteOnMap extends FragmentActivity implements OnMapReadyCallback {
 
-    private GoogleMap mMap;
-
+    private static final int[] COLORS = new int[]{R.color.primary_dark1, R.color.primary1, R.color.primary_light1, R.color.accent1, R.color.primary_dark};
     String startL, startLN, endL, endLN;
     LatLng start, waypoint, end;
+    private GoogleMap mMap;
     private List<Polyline> polylines;
-
-    private static final int[] COLORS = new int[]{R.color.primary_dark1,R.color.primary1,R.color.primary_light1,R.color.accent1,R.color.primary_dark};
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -68,11 +65,9 @@ public class ShowRouteOnMap extends FragmentActivity implements OnMapReadyCallba
         LatLng sydney = new LatLng(-34, 151);
 
 
-
         start = new LatLng(Double.parseDouble(startL), Double.parseDouble(endL));
 
         end = new LatLng(Double.parseDouble(startLN), Double.parseDouble(endLN));
-
 
 
 //        start = new LatLng(33.997797, 71.490276);
@@ -102,12 +97,8 @@ public class ShowRouteOnMap extends FragmentActivity implements OnMapReadyCallba
                     }
 
                     @Override
-                    public void onRoutingSuccess(ArrayList<Route> route, int position)
-                    {
+                    public void onRoutingSuccess(ArrayList<Route> route, int position) {
                         Toast.makeText(ShowRouteOnMap.this, "Success", Toast.LENGTH_SHORT).show();
-
-
-
 
 
 //                        if(polylines.size()>0) {
@@ -118,7 +109,7 @@ public class ShowRouteOnMap extends FragmentActivity implements OnMapReadyCallba
 
                         polylines = new ArrayList<>();
                         //add route(s) to the map.
-                        for (int i = 0; i <route.size(); i++) {
+                        for (int i = 0; i < route.size(); i++) {
 
                             //In case of more than 5 alternative routes
                             int colorIndex = i % COLORS.length;
@@ -130,19 +121,17 @@ public class ShowRouteOnMap extends FragmentActivity implements OnMapReadyCallba
                             Polyline polyline = mMap.addPolyline(polyOptions);
                             polylines.add(polyline);
 
-                            Toast.makeText(getApplicationContext(),"Route "+ (i+1) +": distance - "+ route.get(i).getDistanceValue()+": duration - "+ route.get(i).getDurationValue(),Toast.LENGTH_SHORT).show();
-
-
+                            Toast.makeText(getApplicationContext(), "Route " + (i + 1) + ": distance - " + route.get(i).getDistanceValue() + ": duration - " + route.get(i).getDurationValue(), Toast.LENGTH_SHORT).show();
 
 
                         }
 
                         // Start marker
-                   mMap.addMarker(new MarkerOptions().position(start).title("Start Point"));
+                        mMap.addMarker(new MarkerOptions().position(start).title("Start Point"));
 
                         // End marker
 
-                     mMap.addMarker(new MarkerOptions().position(end).title("End Point"));
+                        mMap.addMarker(new MarkerOptions().position(end).title("End Point"));
 
 
                         CameraPosition cameraPosition = new CameraPosition.Builder().target(start).zoom(13.0f).build();
@@ -157,7 +146,7 @@ public class ShowRouteOnMap extends FragmentActivity implements OnMapReadyCallba
 
                     }
                 })
-                .waypoints(start,end)
+                .waypoints(start, end)
                 .key(getResources().getString(R.string.google_maps_key))
 //                .alternativeRoutes(true)
                 .build();

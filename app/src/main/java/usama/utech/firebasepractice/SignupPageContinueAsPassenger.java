@@ -8,10 +8,6 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Bundle;
-
-import androidx.annotation.NonNull;
-import androidx.appcompat.app.AppCompatActivity;
-
 import android.provider.MediaStore;
 import android.view.MenuItem;
 import android.view.View;
@@ -21,6 +17,9 @@ import android.widget.ImageView;
 import android.widget.PopupMenu;
 import android.widget.Spinner;
 import android.widget.Toast;
+
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
 
 import com.google.android.gms.tasks.Continuation;
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -40,24 +39,18 @@ import java.util.HashMap;
 
 public class SignupPageContinueAsPassenger extends AppCompatActivity {
 
+    private static final int PICK_FROM_CAMERA = 1;
+    private static final int PICK_FROM_GALLARY = 2;
     FirebaseDatabase database;
     FirebaseUser user;
     DatabaseReference myRef;
-    private FirebaseAuth mAuth;
-    private StorageReference mStorageRef;
-
     Spinner genderSpinner, vehecaleType;
     ImageView selectImageV;
-
-    private static final int PICK_FROM_CAMERA = 1;
-    private static final int PICK_FROM_GALLARY = 2;
-
-
     String firstName, lastName, cnicSignup, phonenoSignup, signupProvence, signupCity, emailText, passwordTxt;
     String selectedImgURI = "";
-
     HashMap<String, String> map = new HashMap<>();
-
+    private FirebaseAuth mAuth;
+    private StorageReference mStorageRef;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -164,15 +157,10 @@ public class SignupPageContinueAsPassenger extends AppCompatActivity {
             if (password.equals(reEnterPassword)) {
 
 
-
-
-
-
                 Uri file = Uri.fromFile(new File(selectedImgURI));
-                System.out.println("file path "+file.toString());
+                System.out.println("file path " + file.toString());
 
                 final StorageReference riversRef = mStorageRef.child("profileimages/" + email);
-
 
 
                 UploadTask uploadTask = riversRef.putFile(file);
@@ -195,8 +183,6 @@ public class SignupPageContinueAsPassenger extends AppCompatActivity {
                             System.err.println("Upload " + downloadUri);
 
 
-
-
                             if (downloadUri != null) {
 
 
@@ -212,7 +198,7 @@ public class SignupPageContinueAsPassenger extends AppCompatActivity {
                                                     myRef = database.getReference("Riders");
 
 
-                                                   DatabaseReference pushref = myRef.child(user.getUid());
+                                                    DatabaseReference pushref = myRef.child(user.getUid());
 
 
                                                     String imageStringLink = downloadUri.toString(); //YOU WILL GET THE DOWNLOAD URL HERE !!!!
@@ -242,8 +228,6 @@ public class SignupPageContinueAsPassenger extends AppCompatActivity {
                                                     map.put("online", "true");
 
 
-
-
                                                     pushref.setValue(map).addOnCompleteListener(new OnCompleteListener<Void>() {
                                                         @Override
                                                         public void onComplete(@NonNull Task<Void> task) {
@@ -261,8 +245,6 @@ public class SignupPageContinueAsPassenger extends AppCompatActivity {
                                                     });
 
 
-
-
                                                 } else {
                                                     // If sign in fails, display a message to the user.
                                                     Toast.makeText(SignupPageContinueAsPassenger.this, "User Creation failed.",
@@ -277,9 +259,6 @@ public class SignupPageContinueAsPassenger extends AppCompatActivity {
                                         });
 
 
-
-
-
                             }
 
                         } else {
@@ -289,12 +268,6 @@ public class SignupPageContinueAsPassenger extends AppCompatActivity {
                         }
                     }
                 });
-
-
-
-
-
-
 
 
             } else {
@@ -357,7 +330,7 @@ public class SignupPageContinueAsPassenger extends AppCompatActivity {
 
                     selectedImgURI = data.getDataString();
 
-                    System.err.println("path "+selectedImgURI);
+                    System.err.println("path " + selectedImgURI);
                 }
                 break;
             }
@@ -365,7 +338,7 @@ public class SignupPageContinueAsPassenger extends AppCompatActivity {
 
                 if (requestCode == PICK_FROM_GALLARY && resultCode == RESULT_OK && null != data) {
                     Uri selectedImage = data.getData();
-                    String[] filePathColumn = { MediaStore.Images.Media.DATA };
+                    String[] filePathColumn = {MediaStore.Images.Media.DATA};
 
                     Cursor cursor = getContentResolver().query(selectedImage,
                             filePathColumn, null, null, null);
@@ -378,7 +351,7 @@ public class SignupPageContinueAsPassenger extends AppCompatActivity {
                     cursor.close();
 
                     selectedImgURI = picturePath;
-                    System.err.println("path "+picturePath);
+                    System.err.println("path " + picturePath);
 
                 }
 

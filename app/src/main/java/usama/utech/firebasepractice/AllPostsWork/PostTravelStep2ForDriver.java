@@ -1,10 +1,5 @@
 package usama.utech.firebasepractice.AllPostsWork;
 
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.widget.Toolbar;
-import usama.utech.firebasepractice.HomePageMap;
-import usama.utech.firebasepractice.R;
-
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -14,6 +9,9 @@ import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.Toast;
 
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
+
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.tasks.OnCanceledListener;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -22,21 +20,21 @@ import com.google.firebase.database.FirebaseDatabase;
 
 import java.util.HashMap;
 
+import usama.utech.firebasepractice.HomePageMap;
+import usama.utech.firebasepractice.R;
+
 public class PostTravelStep2ForDriver extends AppCompatActivity {
 
 
-    String uid,profileimgurl,fullname,regulartripstring,startP,endP,depeDate,roundtrip,vehtype;
+    String uid, profileimgurl, fullname, regulartripstring, startP, endP, depeDate, roundtrip, vehtype;
+    LatLng latLngPostStart, latLngPostEnd;
     private DatabaseReference myRef;
     private FirebaseDatabase database;
-
-    LatLng latLngPostStart,latLngPostEnd;
-
-
     private Toolbar myToolbar;
 
     private Spinner vehicletypeSpinner;
 
-    private EditText fareAmountEt,offermessage,noOfPassenger;
+    private EditText fareAmountEt, offermessage, noOfPassenger;
 
 
     @Override
@@ -54,9 +52,7 @@ public class PostTravelStep2ForDriver extends AppCompatActivity {
         noOfPassenger = (EditText) findViewById(R.id.no_of_passengersEdtx);
 
 
-
-
-        if (!getIntent().getStringExtra("uid").equals("")){
+        if (!getIntent().getStringExtra("uid").equals("")) {
             getIntentData();
         }
         database = FirebaseDatabase.getInstance();
@@ -92,7 +88,7 @@ public class PostTravelStep2ForDriver extends AppCompatActivity {
                     map.put("uid", uid);
                     map.put("profileimgurl", profileimgurl);
                     map.put("regulartrip", regulartripstring);
-                    map.put("fareamount",fareAmountEt.getText().toString());
+                    map.put("fareamount", fareAmountEt.getText().toString());
 
                     map.put("startpoint", startP);
                     map.put("endpoint", endP);
@@ -100,7 +96,7 @@ public class PostTravelStep2ForDriver extends AppCompatActivity {
 
                     map.put("roundtrip", roundtrip);
                     map.put("vehicaltype", vehtype);
-                    map.put("fullname",fullname);
+                    map.put("fullname", fullname);
                     map.put("offermessage", offmess);
                     map.put("noofpassenger", noofP);
                     map.put("phoneno", phoneno);
@@ -130,8 +126,6 @@ public class PostTravelStep2ForDriver extends AppCompatActivity {
                 }
 
 
-
-
             }
         });
 
@@ -141,7 +135,7 @@ public class PostTravelStep2ForDriver extends AppCompatActivity {
             public void onClick(View view) {
                 int a = Integer.parseInt(fareAmountEt.getText().toString());
                 int b = a + 1;
-                if (b > -1 ) {
+                if (b > -1) {
                     fareAmountEt.setText(b + "");
 
                 }
@@ -152,7 +146,7 @@ public class PostTravelStep2ForDriver extends AppCompatActivity {
             public void onClick(View view) {
                 int a = Integer.parseInt(fareAmountEt.getText().toString());
                 int b = a - 1;
-                if (b > -1 ) {
+                if (b > -1) {
                     fareAmountEt.setText(b + "");
 
                 }
@@ -162,35 +156,35 @@ public class PostTravelStep2ForDriver extends AppCompatActivity {
     }
 
 
-    public void getIntentData(){
+    public void getIntentData() {
 
-        uid =  getIntent().getStringExtra("uid");
-        profileimgurl =  getIntent().getStringExtra("profileimgurl");
-        fullname =  getIntent().getStringExtra("fullname");
-        regulartripstring =  getIntent().getStringExtra("regulartripstring");
-        startP =  getIntent().getStringExtra("startP");
-        endP =  getIntent().getStringExtra("endP");
-        depeDate =  getIntent().getStringExtra("depeDate");
-        roundtrip =  getIntent().getStringExtra("roundtrip");
+        uid = getIntent().getStringExtra("uid");
+        profileimgurl = getIntent().getStringExtra("profileimgurl");
+        fullname = getIntent().getStringExtra("fullname");
+        regulartripstring = getIntent().getStringExtra("regulartripstring");
+        startP = getIntent().getStringExtra("startP");
+        endP = getIntent().getStringExtra("endP");
+        depeDate = getIntent().getStringExtra("depeDate");
+        roundtrip = getIntent().getStringExtra("roundtrip");
 
-        vehtype =  getIntent().getStringExtra("vehicaltype");
+        vehtype = getIntent().getStringExtra("vehicaltype");
 
         String startLat = getIntent().getStringExtra("latstart");
-        String startLng =getIntent().getStringExtra("lngstart");
+        String startLng = getIntent().getStringExtra("lngstart");
 
-        latLngPostStart = new LatLng(Double.parseDouble(startLat),Double.parseDouble(startLng));
+        latLngPostStart = new LatLng(Double.parseDouble(startLat), Double.parseDouble(startLng));
 
-        String endLat =getIntent().getStringExtra("latend");
+        String endLat = getIntent().getStringExtra("latend");
         String endLng = getIntent().getStringExtra("lngend");
 
-        latLngPostEnd = new LatLng(Double.parseDouble(endLat),Double.parseDouble(endLng));
+        latLngPostEnd = new LatLng(Double.parseDouble(endLat), Double.parseDouble(endLng));
 
     }
 
 
     @Override
     public void onBackPressed() {
-        startActivity(new Intent(getApplicationContext(),PostYourTravel.class));
+        startActivity(new Intent(getApplicationContext(), PostYourTravel.class));
         finish();
     }
 }

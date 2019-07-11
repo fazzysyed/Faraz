@@ -11,20 +11,20 @@ import android.widget.RelativeLayout;
 import android.widget.ScrollView;
 import android.widget.TextView;
 
-import com.squareup.picasso.Picasso;
-
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
-import usama.utech.firebasepractice.R;
 
+import com.squareup.picasso.Picasso;
+
+import usama.utech.firebasepractice.ChatStuff.MessageActivity;
+import usama.utech.firebasepractice.R;
 
 
 public class ScreenAfterPostIsSelectedFromList extends AppCompatActivity implements View.OnClickListener {
 
     String departuredatetime, endpoint, fullname, id, latend, latstart, lngend, lngstart, noofpassenger,
-            offermessage,fareamount,phoneno, profileimgurl, regulartrip, roundtrip, startpoint, uid, vehicaltype;
-
-
+            offermessage, fareamount, phoneno, profileimgurl, regulartrip, roundtrip, startpoint, uid, vehicaltype;
+    String nameOfCurrentLoginUser, phoneNoOfCurrentLoginUser;
     private Toolbar myToolbar;
     private TextView inviteFriendsId;
     private LinearLayout mainLayout;
@@ -50,8 +50,6 @@ public class ScreenAfterPostIsSelectedFromList extends AppCompatActivity impleme
     private TextView returnTimeDetailsDate;
     private TextView returnTimeDetailsTime;
     private LinearLayout offerdetailsdaysLayout;
-
-
     private TextView offerDetailsSat;
     private TextView offerDetailsSun;
     private TextView offerDetailsMon;
@@ -59,9 +57,7 @@ public class ScreenAfterPostIsSelectedFromList extends AppCompatActivity impleme
     private TextView offerDetailsWed;
     private TextView offerDetailsThu;
     private TextView offerDetailsFri;
-
-    private TextView[] array_of_txt ;
-
+    private TextView[] array_of_txt;
     private LinearLayout offerDetailsDaysLine;
     private LinearLayout vehicleTypeLayout;
     private TextView vehicleTypeTx;
@@ -76,8 +72,6 @@ public class ScreenAfterPostIsSelectedFromList extends AppCompatActivity impleme
     private LinearLayout offerMessageLayout;
     private TextView offermessageDetailsTx;
 
-
-    String nameOfCurrentLoginUser,phoneNoOfCurrentLoginUser;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -85,14 +79,14 @@ public class ScreenAfterPostIsSelectedFromList extends AppCompatActivity impleme
 
         initiViews();
 
-        if (getIntent().getStringExtra("typeOfIntent") != null){
+        if (getIntent().getStringExtra("typeOfIntent") != null) {
 
-            if (getIntent().getStringExtra("typeOfIntent").equals("driver")){
+            if (getIntent().getStringExtra("typeOfIntent").equals("driver")) {
                 getIntentDataForDrivers();
 
                 setUpDataForDriver();
 
-            }else if (getIntent().getStringExtra("typeOfIntent").equals("passenger")){
+            } else if (getIntent().getStringExtra("typeOfIntent").equals("passenger")) {
 
                 getIntentDataForPassengers();
                 setUpDataForPassenger();
@@ -104,11 +98,6 @@ public class ScreenAfterPostIsSelectedFromList extends AppCompatActivity impleme
         SharedPreferences prefs = getSharedPreferences("saveddata", MODE_PRIVATE);
         nameOfCurrentLoginUser = prefs.getString("fullname", "");
         phoneNoOfCurrentLoginUser = prefs.getString("phoneno", "");
-
-
-
-
-
 
 
     }
@@ -133,15 +122,16 @@ public class ScreenAfterPostIsSelectedFromList extends AppCompatActivity impleme
         phoneno = getIntent().getStringExtra("phoneno");
         vehicaltype = getIntent().getStringExtra("vehicaltype");
         offermessage = getIntent().getStringExtra("offermessage");
-        fareamount= getIntent().getStringExtra("fareamount");
+        fareamount = getIntent().getStringExtra("fareamount");
     }
+
     void setUpDataForDriver() {
         offerTypeMessage.setText("is offering a ride");
 
         offerDetailsName.setText(fullname);
 
-        System.err.println("name is "+getIntent().getStringExtra("fullname"));
-        System.err.println("fareamount is "+fareamount);
+        System.err.println("name is " + getIntent().getStringExtra("fullname"));
+        System.err.println("fareamount is " + fareamount);
         offermessageDetailsTx.setText(offermessage);
 
         mobileDetailsTx.setText(phoneno);
@@ -150,7 +140,7 @@ public class ScreenAfterPostIsSelectedFromList extends AppCompatActivity impleme
 
         vehicleTypeDetailTx.setText(vehicaltype);
 
-        String split [] = regulartrip.split(",");
+        String split[] = regulartrip.split(",");
 
 //        array_of_txt[0].setVisibility(View.VISIBLE);
 //        System.err.println("day is "+array_of_txt[0].getText().toString());
@@ -163,11 +153,10 @@ public class ScreenAfterPostIsSelectedFromList extends AppCompatActivity impleme
 
             for (int j = 0; j < len2; j++) {
 
-                if (split[i].toLowerCase().equals(array_of_txt[j].getText().toString().toLowerCase())){
+                if (split[i].toLowerCase().equals(array_of_txt[j].getText().toString().toLowerCase())) {
 
                     array_of_txt[j].setVisibility(View.VISIBLE);
                 }
-
 
 
             }
@@ -181,12 +170,10 @@ public class ScreenAfterPostIsSelectedFromList extends AppCompatActivity impleme
         startTimeDetailsTime.setText(split2[1]);
 
 
-
         String split3[] = roundtrip.split(",");
 
         returnTimeDetailsDate.setText(split3[0]);
         returnTimeDetailsTime.setText(split3[1]);
-
 
 
         offerDetailsStartAddress.setText(startpoint);
@@ -199,9 +186,8 @@ public class ScreenAfterPostIsSelectedFromList extends AppCompatActivity impleme
                 .into(offerDetailsImage);
 
 
-
-
     }
+
     private void getIntentDataForPassengers() {
 
         departuredatetime = getIntent().getStringExtra("departuredatetime");
@@ -222,6 +208,7 @@ public class ScreenAfterPostIsSelectedFromList extends AppCompatActivity impleme
 
 
     }
+
     private void setUpDataForPassenger() {
 
         //vehical
@@ -230,15 +217,11 @@ public class ScreenAfterPostIsSelectedFromList extends AppCompatActivity impleme
         vehicleTypeLayout.setVisibility(View.GONE);
 
 
-
-
-
         offerTypeMessage.setText("Wants to take a ride");
         offerDetailsName.setText(fullname);
 
 
-
-        String split [] = roundtrip.split(",");
+        String split[] = roundtrip.split(",");
 
         int len = split.length;
         int len2 = array_of_txt.length;
@@ -247,7 +230,7 @@ public class ScreenAfterPostIsSelectedFromList extends AppCompatActivity impleme
 
             for (int j = 0; j < len; j++) {
 
-                if (split[i].equals(array_of_txt[j].getText().toString())){
+                if (split[i].equals(array_of_txt[j].getText().toString())) {
 
                     array_of_txt[j].setVisibility(View.VISIBLE);
                 }
@@ -262,12 +245,10 @@ public class ScreenAfterPostIsSelectedFromList extends AppCompatActivity impleme
         startTimeDetailsTime.setText(split2[1]);
 
 
-
         String split3[] = roundtrip.split(",");
 
         returnTimeDetailsDate.setText(split3[0]);
         returnTimeDetailsTime.setText(split3[1]);
-
 
 
         offerDetailsStartAddress.setText(startpoint);
@@ -282,7 +263,7 @@ public class ScreenAfterPostIsSelectedFromList extends AppCompatActivity impleme
     }
 
 
-    void initiViews(){
+    void initiViews() {
 
 
         myToolbar = (Toolbar) findViewById(R.id.my_toolbar);
@@ -293,10 +274,10 @@ public class ScreenAfterPostIsSelectedFromList extends AppCompatActivity impleme
         offerDetailsName = (TextView) findViewById(R.id.offer_details_name);
         offerTypeMessage = (TextView) findViewById(R.id.offer_type_message);
         watchVideoLayout = (RelativeLayout) findViewById(R.id.watch_video_layout);
-        findViewById(R.id.watch_video_Bt).setOnClickListener(this);
+        findViewById(R.id.send_request_btn).setOnClickListener(this);
         contactLayout = (RelativeLayout) findViewById(R.id.contact_layout);
         findViewById(R.id.call_bt).setOnClickListener(this);
-        findViewById(R.id.send_request).setOnClickListener(this);
+        findViewById(R.id.start_chat_btn).setOnClickListener(this);
         findViewById(R.id.sms_bt).setOnClickListener(this);
         routeArrow = (ImageView) findViewById(R.id.route_arrow);
         offerDetailsStartName = (TextView) findViewById(R.id.offer_details_start_name);
@@ -325,7 +306,7 @@ public class ScreenAfterPostIsSelectedFromList extends AppCompatActivity impleme
         offerDetailsThu = (TextView) findViewById(R.id.offer_details_thu);
         offerDetailsFri = (TextView) findViewById(R.id.offer_details_fri);
 
-       array_of_txt = new TextView[]{offerDetailsSat,offerDetailsSun,offerDetailsMon,offerDetailsTue,offerDetailsTue,offerDetailsWed,offerDetailsThu,offerDetailsFri};
+        array_of_txt = new TextView[]{offerDetailsSat, offerDetailsSun, offerDetailsMon, offerDetailsTue, offerDetailsTue, offerDetailsWed, offerDetailsThu, offerDetailsFri};
 
         offerDetailsDaysLine = (LinearLayout) findViewById(R.id.offerDetails_daysLine);
         vehicleTypeLayout = (LinearLayout) findViewById(R.id.vehicle_type_layout);
@@ -347,40 +328,49 @@ public class ScreenAfterPostIsSelectedFromList extends AppCompatActivity impleme
     @Override
     public void onClick(View view) {
         switch (view.getId()) {
-            case R.id.watch_video_Bt:
+            case R.id.send_request_btn:
                 //TODO implement
+
+
                 break;
             case R.id.call_bt:
 
                 Intent callIntent = new Intent(Intent.ACTION_CALL);
-                callIntent.setData(Uri.parse("tel:"+phoneno));//change the number.
+                callIntent.setData(Uri.parse("tel:" + phoneno));//change the number.
                 startActivity(callIntent);
 
                 break;
-            case R.id.send_request:
-                //TODO implement
+            case R.id.start_chat_btn:
+
+                if (!uid.equals("")) {
+                    Intent intent = new Intent(getApplicationContext(), MessageActivity.class);
+
+                    intent.putExtra("userid", uid);
+
+                    startActivity(intent);
+                }
+
                 break;
             case R.id.sms_bt:
-                String message = "Hello iRide User,\n\nThis is to inform you that "+nameOfCurrentLoginUser+" wants to share ride with you," +
-                        " if you wish to do the same kindly respond to him on his contact no ("+phoneNoOfCurrentLoginUser+") \n\nThank You \niRide Pakistan";
+                String message = "Hello iRide User,\n\nThis is to inform you that " + nameOfCurrentLoginUser + " wants to share ride with you," +
+                        " if you wish to do the same kindly respond to him on his contact no (" + phoneNoOfCurrentLoginUser + ") \n\nThank You \niRide Pakistan";
                 Intent i = new Intent(Intent.ACTION_VIEW);
                 i.setData(Uri.parse("smsto:"));
                 i.setType("vnd.android-dir/mms-sms");
                 i.putExtra("address", phoneno);
-                i.putExtra("sms_body",message);
+                i.putExtra("sms_body", message);
                 startActivity(Intent.createChooser(i, "Send sms via:"));
 
                 break;
             case R.id.check_route_bt:
 
 
+                Intent intent = new Intent(getApplicationContext(), ShowRouteOnMap.class);
 
-                Intent intent = new Intent(getApplicationContext(),ShowRouteOnMap.class);
-
-                intent.putExtra("latstart",latstart);
-                intent.putExtra("latend",latend);
-                intent.putExtra("lngstart",lngstart);
-                intent.putExtra("lngend",lngend);
+                intent.putExtra("latstart", latstart);
+                intent.putExtra("latend", latend);
+                intent.putExtra("lngstart", lngstart);
+                intent.putExtra("lngend", lngend);
                 startActivity(intent);
 
                 break;

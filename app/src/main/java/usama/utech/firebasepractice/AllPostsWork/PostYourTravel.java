@@ -21,6 +21,10 @@ import android.widget.TimePicker;
 import android.widget.Toast;
 import android.widget.ToggleButton;
 
+import androidx.annotation.Nullable;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
+
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.tasks.OnCanceledListener;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -31,13 +35,22 @@ import com.google.firebase.database.FirebaseDatabase;
 import java.util.Calendar;
 import java.util.HashMap;
 
-import androidx.annotation.Nullable;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.widget.Toolbar;
 import usama.utech.firebasepractice.HomePageMap;
 import usama.utech.firebasepractice.R;
 
 public class PostYourTravel extends AppCompatActivity {
+    LatLng latLngPostStart, latLngPostEnd;
+    String date_time = "";
+    int mYear;
+    int mMonth;
+    int mDay;
+    int mHour;
+    int mMinute;
+    //for time picker return time for round trip
+    int Hour;
+    int Minute;
+    FirebaseDatabase database;
+    DatabaseReference myRef;
     private Toolbar myToolbar;
     private LinearLayout mainLayout;
     private LinearLayout offerLiftLayout;
@@ -76,24 +89,6 @@ public class PostYourTravel extends AppCompatActivity {
     private TextView offerreturndateHeader;
     private TextView offerreturndateDetail;
     private Button offerLiftConfirm;
-
-
-    LatLng latLngPostStart,latLngPostEnd;
-
-    String date_time = "";
-    int mYear;
-    int mMonth;
-    int mDay;
-
-    int mHour;
-    int mMinute;
-
-    //for time picker return time for round trip
-    int Hour;
-    int Minute;
-
-    FirebaseDatabase database;
-    DatabaseReference myRef;
     private FirebaseAuth mAuth;
 
 
@@ -335,7 +330,7 @@ public class PostYourTravel extends AppCompatActivity {
                                                 Hour = hourOfDay;
                                                 Minute = minute;
 
-                                                offerReturnTimetx.setText(date_time+", "+hourOfDay + ":" + minute);
+                                                offerReturnTimetx.setText(date_time + ", " + hourOfDay + ":" + minute);
                                             }
                                         }, Hour, Minute, false);
                                 timePickerDialo.show();
@@ -381,7 +376,8 @@ public class PostYourTravel extends AppCompatActivity {
         });
 
         findViewById(R.id.offerLiftConfirm).setOnClickListener(new View.OnClickListener() {
-            @Override           public void onClick(View view) {
+            @Override
+            public void onClick(View view) {
                 SharedPreferences prefs = getSharedPreferences("saveddata", MODE_PRIVATE);
                 String uidfromperfs = prefs.getString("uid", "nouid");
                 String profileimgurl = prefs.getString("profileimageurl", "noimg");
@@ -490,8 +486,7 @@ public class PostYourTravel extends AppCompatActivity {
                         }
                     });
 
-                }
-                else if (drawabledriver.getConstantState().equals(getResources().getDrawable(R.drawable.vehicle_enabled).getConstantState())) {
+                } else if (drawabledriver.getConstantState().equals(getResources().getDrawable(R.drawable.vehicle_enabled).getConstantState())) {
 
 
                     String regulartripstring = "";
@@ -576,10 +571,10 @@ public class PostYourTravel extends AppCompatActivity {
 
     }
 
-    void timepicker2forround()
-    {
+    void timepicker2forround() {
 
     }
+
     private void datePicker() {
 
         // Get Current Date
@@ -640,7 +635,7 @@ public class PostYourTravel extends AppCompatActivity {
             String lat = data.getStringExtra("latstart");
             String lng = data.getStringExtra("lngstart");
 
-            latLngPostStart = new LatLng(Double.parseDouble(lat),Double.parseDouble(lng));
+            latLngPostStart = new LatLng(Double.parseDouble(lat), Double.parseDouble(lng));
 
             startPointTx.setText(loc + "");
         }
@@ -649,7 +644,7 @@ public class PostYourTravel extends AppCompatActivity {
             String lat = data.getStringExtra("latend");
             String lng = data.getStringExtra("lngend");
 
-            latLngPostEnd = new LatLng(Double.parseDouble(lat),Double.parseDouble(lng));
+            latLngPostEnd = new LatLng(Double.parseDouble(lat), Double.parseDouble(lng));
 
             endPointTx.setText(loc + "");
         }

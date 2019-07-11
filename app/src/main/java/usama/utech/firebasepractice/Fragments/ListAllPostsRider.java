@@ -4,14 +4,15 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.Bundle;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
-
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.ChildEventListener;
@@ -22,8 +23,6 @@ import com.google.firebase.database.FirebaseDatabase;
 
 import java.util.ArrayList;
 
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
 import usama.utech.firebasepractice.Adatpters.PostAdapter;
 import usama.utech.firebasepractice.ModelClasses.PostDriver;
 import usama.utech.firebasepractice.ModelClasses.PostRider;
@@ -43,30 +42,19 @@ public class ListAllPostsRider extends Fragment {
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
 
+    private static final String ARG_PARAM1 = "param1";
+    private static final String ARG_PARAM2 = "param2";
     RecyclerView recyclerView;
     PostAdapter postAdapter;
     ArrayList<PostRider> postRiderArrayList = new ArrayList<>();
-    private ArrayList<PostDriver> list = new ArrayList<>();
-
-
     DatabaseReference myRef;
-
+    String currentUserUid;
+    private ArrayList<PostDriver> list = new ArrayList<>();
     private FirebaseAuth mAuth;
-
-
-
-
-
-
-    private static final String ARG_PARAM1 = "param1";
-    private static final String ARG_PARAM2 = "param2";
-
     // TODO: Rename and change types of parameters
     private String mParam1;
     private String mParam2;
-
     private OnFragmentInteractionListener mListener;
-     String currentUserUid;
 
     public ListAllPostsRider() {
         // Required empty public constructor
@@ -113,7 +101,7 @@ public class ListAllPostsRider extends Fragment {
 
         myRef = FirebaseDatabase.getInstance().getReference("PostsAsPassenger");
 
-        postAdapter = new PostAdapter(getActivity() , list ,postRiderArrayList,false);
+        postAdapter = new PostAdapter(getActivity(), list, postRiderArrayList, false);
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
         recyclerView.setAdapter(postAdapter);
 
@@ -121,7 +109,7 @@ public class ListAllPostsRider extends Fragment {
             @Override
             public void onChildAdded(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
 //to avoid nuul exception
-                list.add(new PostDriver("","","","","","","","","","","","","","","","","",""));
+                list.add(new PostDriver("", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", ""));
 
 
                 PostRider value = dataSnapshot.getValue(PostRider.class);
@@ -154,12 +142,6 @@ public class ListAllPostsRider extends Fragment {
         });
 
 
-
-
-
-
-
-
         return view;
     }
 
@@ -169,6 +151,7 @@ public class ListAllPostsRider extends Fragment {
             mListener.onFragmentInteraction(uri);
         }
     }
+
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
@@ -185,6 +168,7 @@ public class ListAllPostsRider extends Fragment {
                     + " must implement OnFragmentInteractionListener");
         }
     }
+
     @Override
     public void onDetach() {
         super.onDetach();

@@ -2,18 +2,31 @@ package usama.utech.firebasepractice.ModelClasses;
 
 public class User {
 
-    String id;
-    String age;
-    String name;
+    private String id;
+    private String username;
+    private String imageURL;
+    private String status;
+    private String search;
 
     public User() {
+
     }
 
-    public User(String id, String age, String name) {
+    public User(String id, String username, String imageURL, String status) {
         this.id = id;
-        this.age = age;
-        this.name = name;
+        this.username = username;
+        this.imageURL = imageURL;
+        this.status = status;
     }
+
+    public User(String id, String username, String imageURL, String status, String search) {
+        this.id = id;
+        this.username = username;
+        this.imageURL = imageURL;
+        this.status = status;
+        this.search = search;
+    }
+
 
     public String getId() {
         return id;
@@ -23,19 +36,35 @@ public class User {
         this.id = id;
     }
 
-    public String getAge() {
-        return age;
+    public String getUsername() {
+        return username;
     }
 
-    public void setAge(String age) {
-        this.age = age;
+    public void setUsername(String username) {
+        this.username = username;
     }
 
-    public String getName() {
-        return name;
+    public String getImageURL() {
+        return imageURL;
     }
 
-    public void setName(String name) {
-        this.name = name;
+    public void setImageURL(String imageURL) {
+        this.imageURL = imageURL;
+    }
+
+    public String getStatus() {
+        return status;
+    }
+
+    public void setStatus(String status) {
+        this.status = status;
+    }
+
+    public String getSearch() {
+        return search;
+    }
+
+    public void setSearch(String search) {
+        this.search = search;
     }
 }

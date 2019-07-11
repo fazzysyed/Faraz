@@ -24,17 +24,15 @@ public class BitmapConversion {
         return BitmapFactory.decodeByteArray(image, 0, image.length);
     }
 
-    public static  byte[] getByteArrayFromImageView(ImageView imageView)
-    {
+    public static byte[] getByteArrayFromImageView(ImageView imageView) {
         BitmapDrawable bitmapDrawable = ((BitmapDrawable) imageView.getDrawable());
         Bitmap bitmap;
-        if(bitmapDrawable==null){
+        if (bitmapDrawable == null) {
             imageView.buildDrawingCache();
             bitmap = imageView.getDrawingCache();
             imageView.buildDrawingCache(false);
-        }else
-        {
-            bitmap = bitmapDrawable .getBitmap();
+        } else {
+            bitmap = bitmapDrawable.getBitmap();
         }
         ByteArrayOutputStream stream = new ByteArrayOutputStream();
         bitmap.compress(Bitmap.CompressFormat.JPEG, 100, stream);
