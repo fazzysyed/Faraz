@@ -10,11 +10,17 @@ import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.ScrollView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 import com.squareup.picasso.Picasso;
+
+import java.util.HashMap;
 
 import usama.utech.firebasepractice.ChatStuff.MessageActivity;
 import usama.utech.firebasepractice.R;
@@ -79,22 +85,23 @@ public class ScreenAfterPostIsSelectedFromList extends AppCompatActivity impleme
 
         initiViews();
 
-        if (getIntent().getStringExtra("typeOfIntent") != null) {
+        if (getIntent() != null) {
+            if (getIntent().getStringExtra("typeOfIntent") != null) {
 
-            if (getIntent().getStringExtra("typeOfIntent").equals("driver")) {
-                getIntentDataForDrivers();
+                if (getIntent().getStringExtra("typeOfIntent").equals("driver")) {
+                    getIntentDataForDrivers();
 
-                setUpDataForDriver();
+                    setUpDataForDriver();
 
-            } else if (getIntent().getStringExtra("typeOfIntent").equals("passenger")) {
+                } else if (getIntent().getStringExtra("typeOfIntent").equals("passenger")) {
 
-                getIntentDataForPassengers();
-                setUpDataForPassenger();
+                    getIntentDataForPassengers();
+                    setUpDataForPassenger();
+                }
+
             }
 
         }
-
-
         SharedPreferences prefs = getSharedPreferences("saveddata", MODE_PRIVATE);
         nameOfCurrentLoginUser = prefs.getString("fullname", "");
         phoneNoOfCurrentLoginUser = prefs.getString("phoneno", "");
@@ -147,35 +154,42 @@ public class ScreenAfterPostIsSelectedFromList extends AppCompatActivity impleme
 //        System.err.println("day from up is "+split[0]);
 
         int len = split.length;
-        int len2 = array_of_txt.length;
 
-        for (int i = 0; i < len; i++) {
+            int len2 = array_of_txt.length;
 
-            for (int j = 0; j < len2; j++) {
+            for (int i = 0; i < len; i++) {
 
-                if (split[i].toLowerCase().equals(array_of_txt[j].getText().toString().toLowerCase())) {
+                for (int j = 0; j < len2; j++) {
 
-                    array_of_txt[j].setVisibility(View.VISIBLE);
+                    if (split[i].toLowerCase().equals(array_of_txt[j].getText().toString().toLowerCase())) {
+
+                        array_of_txt[j].setVisibility(View.VISIBLE);
+                    }
+
+
                 }
-
 
             }
 
-        }
 
 
         String split2[] = departuredatetime.split(",");
 
-        startTimeDetailsDate.setText(split2[0]);
-        startTimeDetailsTime.setText(split2[1]);
+        if (split2.length < 2 ) {
 
+            System.err.println("time isa"+split2[0]+"----"+split2[1]);
+
+            startTimeDetailsDate.setText(split2[0]);
+            startTimeDetailsTime.setText(split2[1]);
+        }
 
         String split3[] = roundtrip.split(",");
 
-        returnTimeDetailsDate.setText(split3[0]);
-        returnTimeDetailsTime.setText(split3[1]);
+        if (split3.length < 2) {
+            returnTimeDetailsDate.setText(split3[0]);
+            returnTimeDetailsTime.setText(split3[1]);
 
-
+        }
         offerDetailsStartAddress.setText(startpoint);
         offerDetailsEndAddress.setText(endpoint);
 
@@ -329,9 +343,37 @@ public class ScreenAfterPostIsSelectedFromList extends AppCompatActivity impleme
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.send_request_btn:
-                //TODO implement
+                SharedPreferences prefs = getSharedPreferences("saveddata", MODE_PRIVATE);
+
+                String uid2 = prefs.getString("uid", "");
+                String nameo = prefs.getString("fullname", "");
+                String profileima = prefs.getString("profileimageurl", "");
 
 
+                if (!uid2.equals("")) {
+                    DatabaseReference ref = FirebaseDatabase.getInstance().getReference("Requests")
+                            .child(uid).child(id).push();
+
+
+
+                    HashMap<String, Object> map = new HashMap<>();
+                    map.put("id", ref.getKey());
+                    map.put("senderid", uid2);
+                    map.put("reciverid", uid);
+                    map.put("postid", id);
+                    map.put("sendername", nameo);
+                    map.put("imgurl", profileima);
+                    map.put("startpoint", startpoint);
+                    map.put("endpoint", endpoint);
+                    map.put("status", "pending");
+
+                    ref.setValue(map).addOnSuccessListener(new OnSuccessListener<Void>() {
+                        @Override
+                        public void onSuccess(Void aVoid) {
+                            Toast.makeText(ScreenAfterPostIsSelectedFromList.this, "Done!", Toast.LENGTH_SHORT).show();
+                        }
+                    });
+                }
                 break;
             case R.id.call_bt:
 

@@ -352,14 +352,27 @@ public class HomePageMap extends AppCompatActivity implements OnMapReadyCallback
         String currentlatitude = prefs.getString("currentlatitude", "");
         String uid = prefs.getString("uid", "");
 
-        myRef = database.getReference("Drivers").child(uid);
 
-        HashMap<String, String> updateLocationMap = new HashMap<>();
-        updateLocationMap.put("currentlogitude", String.valueOf(location.getLongitude()));
-        updateLocationMap.put("currentlatitude", String.valueOf(location.getLatitude()));
+       if (type_user.equals("driver")) {
+           myRef = database.getReference("Drivers").child(uid);
 
-        myRef.updateChildren((HashMap) updateLocationMap);
 
+           HashMap<String, String> updateLocationMap = new HashMap<>();
+           updateLocationMap.put("currentlogitude", String.valueOf(location.getLongitude()));
+           updateLocationMap.put("currentlatitude", String.valueOf(location.getLatitude()));
+
+           myRef.updateChildren((HashMap) updateLocationMap);
+       }else if (type_user.equals("rider")){
+
+           myRef = database.getReference("Riders").child(uid);
+
+
+           HashMap<String, String> updateLocationMap = new HashMap<>();
+           updateLocationMap.put("currentlogitude", String.valueOf(location.getLongitude()));
+           updateLocationMap.put("currentlatitude", String.valueOf(location.getLatitude()));
+
+           myRef.updateChildren((HashMap) updateLocationMap);
+       }
 
     }
 
@@ -397,11 +410,12 @@ public class HomePageMap extends AppCompatActivity implements OnMapReadyCallback
     @Override
     protected void onStop() {
         super.onStop();
-        if (mGoogleApiClient.isConnected()) {
-            mGoogleApiClient.disconnect();
+        if (mGoogleApiClient != null) {
+            if (mGoogleApiClient.isConnected()) {
+                mGoogleApiClient.disconnect();
+            }
+
         }
-
-
         status("false");
         currentUser("none");
 
@@ -584,7 +598,8 @@ public class HomePageMap extends AppCompatActivity implements OnMapReadyCallback
 
         } else if (id == R.id.contactMenu) {
             Toast.makeText(this, "contactMenu", Toast.LENGTH_SHORT).show();
-
+        } else if (id == R.id.requests) {
+            Toast.makeText(this, "REquewsts", Toast.LENGTH_SHORT).show();
         } else if (id == R.id.logoutMenu) {
 
 

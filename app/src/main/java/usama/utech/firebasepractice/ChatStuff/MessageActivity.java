@@ -178,7 +178,7 @@ public class MessageActivity extends AppCompatActivity {
             }
         });
 
-        if (type_user.equals("driver")) {
+        if (type_user.equals("rider")) {
             reference = FirebaseDatabase.getInstance().getReference("Drivers").child(userid);
 
             reference.addValueEventListener(new ValueEventListener() {
@@ -204,7 +204,7 @@ public class MessageActivity extends AppCompatActivity {
 
             seenMessage(userid);
 
-        } else if (type_user.equals("rider")) {
+        } else if (type_user.equals("driver")) {
 
             reference = FirebaseDatabase.getInstance().getReference("Riders").child(userid);
 

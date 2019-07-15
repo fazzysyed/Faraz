@@ -91,7 +91,7 @@ public class UsersFragment extends Fragment {
 
     private void searchUsers(String s) {
 
-        if (type_user.equals("driver")) {
+        if (type_user.equals("rider")) {
 
 
             final FirebaseUser fuser = FirebaseAuth.getInstance().getCurrentUser();
@@ -124,7 +124,7 @@ public class UsersFragment extends Fragment {
                 }
             });
 
-        } else if (type_user.equals("rider")) {
+        } else if (type_user.equals("driver")) {
 
             final FirebaseUser fuser = FirebaseAuth.getInstance().getCurrentUser();
             Query query = FirebaseDatabase.getInstance().getReference("Riders").orderByChild("fullname")
@@ -136,9 +136,9 @@ public class UsersFragment extends Fragment {
                 public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                     mUsers.clear();
                     for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
-                        DriverModel user = snapshot.getValue(DriverModel.class);
+                        RiderModel user = snapshot.getValue(RiderModel.class);
 
-
+                        System.err.println("riderData"+user.getFullname());
                         assert user != null;
                         assert fuser != null;
                         if (!user.getUid().equals(fuser.getUid())) {
@@ -163,7 +163,7 @@ public class UsersFragment extends Fragment {
     private void readUsers() {
 
 
-        if (type_user.equals("driver")) {
+        if (type_user.equals("rider")) {
 
             final FirebaseUser firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
             DatabaseReference reference = FirebaseDatabase.getInstance().getReference("Drivers");
@@ -197,7 +197,7 @@ public class UsersFragment extends Fragment {
 
                 }
             });
-        } else if (type_user.equals("rider")) {
+        } else if (type_user.equals("driver")) {
 
 
             final FirebaseUser firebaseUser = FirebaseAuth.getInstance().getCurrentUser();

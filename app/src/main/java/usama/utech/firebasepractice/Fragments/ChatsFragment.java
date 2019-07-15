@@ -97,7 +97,7 @@ public class ChatsFragment extends Fragment {
 
     private void chatList() {
 
-        if (type_user.equals("driver")) {
+        if (type_user.equals("rider")) {
 
             mUsers = new ArrayList<>();
             reference = FirebaseDatabase.getInstance().getReference("Drivers");
@@ -109,6 +109,7 @@ public class ChatsFragment extends Fragment {
                         DriverModel user = snapshot.getValue(DriverModel.class);
                         for (Chatlist chatlist : usersList) {
                             if (user.getUid().equals(chatlist.getId())) {
+
                                 mUsers.add(new User(user.getUid(),user.getFullname(),user.getProfileimageurl(),user.getOnline()));
 
 
@@ -124,7 +125,7 @@ public class ChatsFragment extends Fragment {
 
                 }
             });
-        }else   if (type_user.equals("rider")) {
+        }else   if (type_user.equals("driver")) {
 
 
             mUsers = new ArrayList<>();
@@ -139,6 +140,7 @@ public class ChatsFragment extends Fragment {
                             if (user.getUid().equals(chatlist.getId())) {
                                 mUsers.add(new User(user.getUid(),user.getFullname(),user.getProfileimageurl(),user.getOnline()));
 
+                                System.err.println("userdatac "+user.getFullname());
 
                             }
                         }

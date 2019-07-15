@@ -25,8 +25,7 @@ import usama.utech.firebasepractice.R;
 
 public class ProfilePage extends AppCompatActivity implements
         MySentRequests.OnFragmentInteractionListener,
-        MyAddedPosts.OnFragmentInteractionListener,
-        RecivedRequests.OnFragmentInteractionListener {
+        MyAddedPosts.OnFragmentInteractionListener{
 
 
     CircularImageView circularImageView;
@@ -76,8 +75,7 @@ public class ProfilePage extends AppCompatActivity implements
         FragmentPagerItemAdapter adapter = new FragmentPagerItemAdapter(
                 getSupportFragmentManager(), FragmentPagerItems.with(this)
                 .add("My Posts", MyAddedPosts.class)
-                .add("My Requests", MySentRequests.class)
-                .add("Recived Requests", RecivedRequests.class)
+                .add("Approved Requests", MySentRequests.class)
                 .create());
 
         ViewPager viewPager = (ViewPager) findViewById(R.id.viewpager_profilepage);
