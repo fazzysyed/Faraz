@@ -232,6 +232,12 @@ public class MessageActivity extends AppCompatActivity {
             seenMessage(userid);
 
         }
+
+
+
+        //make user online
+        status("true");
+
     }
 
     private void seenMessage(final String userid) {

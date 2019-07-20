@@ -69,6 +69,7 @@ import usama.utech.firebasepractice.AllPostsWork.PostYourTravel;
 import usama.utech.firebasepractice.ChatStuff.MainActivity;
 import usama.utech.firebasepractice.ModelClasses.User;
 import usama.utech.firebasepractice.ProfilePageStuff.ProfilePage;
+import usama.utech.firebasepractice.Requests.AllRequests;
 
 public class HomePageMap extends AppCompatActivity implements OnMapReadyCallback, GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener, LocationListener, NavigationView.OnNavigationItemSelectedListener {
 
@@ -106,6 +107,7 @@ public class HomePageMap extends AppCompatActivity implements OnMapReadyCallback
 
     FirebaseUser fuser;
     private String uid;
+    private String fullname;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -162,7 +164,7 @@ public class HomePageMap extends AppCompatActivity implements OnMapReadyCallback
         photo_url_user = prefs.getString("profileimageurl", "");
         email_user = prefs.getString("email", "");
         type_user = prefs.getString("type", "");
-
+        fullname = prefs.getString("fullname", "");
 
         View headerview = navigationView.getHeaderView(0);
 
@@ -180,12 +182,12 @@ public class HomePageMap extends AppCompatActivity implements OnMapReadyCallback
                     .into(ImageViewNav);
 
             EmailUserTxt.setText(email_user);
-            TypeUserTxt.setText(type_user);
+            TypeUserTxt.setText(fullname+"\n\t\t\t"+type_user);
 
 
         } else if (type_user.equals("driver")) {
             EmailUserTxt.setText(email_user);
-            TypeUserTxt.setText(type_user);
+            TypeUserTxt.setText(fullname+"\n\t\t\t"+type_user);
             Picasso.get()
                     .load(photo_url_user)
                     .placeholder(R.drawable.ic_launcher_background)
@@ -595,11 +597,12 @@ public class HomePageMap extends AppCompatActivity implements OnMapReadyCallback
 
         } else if (id == R.id.messangerMenue) {
             startActivity(new Intent(HomePageMap.this, MainActivity.class));
-
+finish();
         } else if (id == R.id.contactMenu) {
             Toast.makeText(this, "contactMenu", Toast.LENGTH_SHORT).show();
         } else if (id == R.id.requests) {
-            Toast.makeText(this, "REquewsts", Toast.LENGTH_SHORT).show();
+            startActivity(new Intent(getApplicationContext(), AllRequests.class));
+            finish();
         } else if (id == R.id.logoutMenu) {
 
 

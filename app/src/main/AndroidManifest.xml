@@ -28,7 +28,8 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".ProfilePageStuff.RecivedRequestsActivity"></activity>
+        <activity android:name=".Requests.AllRequests" />
+        <activity android:name=".ProfilePageStuff.RecivedRequestsActivity" />
         <activity android:name=".ProfilePageStuff.ProfilePage" />
         <!--
              The API key for Google Maps-based APIs is defined as a string resource.

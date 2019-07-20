@@ -62,6 +62,10 @@ public class MainActivity extends AppCompatActivity {
 
         firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
 
+
+
+
+
         SharedPreferences prefs = getSharedPreferences("saveddata", MODE_PRIVATE);
 
         type_user = prefs.getString("type", "");
@@ -118,7 +122,8 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-
+//make user online
+        status("true");
     }
 
     private void status(String status) {

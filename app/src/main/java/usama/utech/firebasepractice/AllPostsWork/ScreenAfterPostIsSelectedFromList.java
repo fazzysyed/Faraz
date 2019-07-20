@@ -23,6 +23,7 @@ import com.squareup.picasso.Picasso;
 import java.util.HashMap;
 
 import usama.utech.firebasepractice.ChatStuff.MessageActivity;
+import usama.utech.firebasepractice.HomePageMap;
 import usama.utech.firebasepractice.R;
 
 
@@ -109,6 +110,11 @@ public class ScreenAfterPostIsSelectedFromList extends AppCompatActivity impleme
 
     }
 
+    @Override
+    public void onBackPressed() {
+        startActivity(new Intent(getApplicationContext(), HomePageMap.class));
+        finish();
+    }
 
     private void getIntentDataForDrivers() {
 

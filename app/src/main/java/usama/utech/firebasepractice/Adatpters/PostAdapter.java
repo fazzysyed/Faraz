@@ -11,25 +11,25 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.ValueEventListener;
 import com.mikhaellopez.circularimageview.CircularImageView;
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Map;
 
 import usama.utech.firebasepractice.AllPostsWork.ScreenAfterPostIsSelectedFromList;
-import usama.utech.firebasepractice.LoginPage;
 import usama.utech.firebasepractice.ModelClasses.PostDriver;
 import usama.utech.firebasepractice.ModelClasses.PostRider;
 import usama.utech.firebasepractice.ModelClasses.RequestsModel;
@@ -62,7 +62,6 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.MyViewHolder> 
     }
 
 
-
     @NonNull
     @Override
     public MyViewHolder onCreateViewHolder(@NonNull ViewGroup viewGroup, int i) {
@@ -75,7 +74,8 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.MyViewHolder> 
         final int pos = position;
         System.err.println("working " + position);
 
-        if (isProfile.equals("false")) {
+        if (isProfile.equals("false"))
+        {
 
             if (isDriverP) {
 
@@ -173,7 +173,8 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.MyViewHolder> 
                         .into(holder.user_profile_img_rec_post);
             }
         }
-        else if (isProfile.equals("true")) {
+        else if (isProfile.equals("true"))
+        {
 
             if (isDriverP) {
 
@@ -271,8 +272,7 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.MyViewHolder> 
                         .into(holder.user_profile_img_rec_post);
             }
 
-        }
-        else if (isProfile.equals("not")) {
+        } else if (isProfile.equals("not")) {
 
             if (isDriverP) {
 
@@ -297,57 +297,125 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.MyViewHolder> 
                                 switch (item.getTitle().toString()) {
                                     case "Accept Request":
 
+                                        DatabaseReference ref = FirebaseDatabase.getInstance().getReference("Accepted Requests").child(obj.getUid()).push();
 
                                         RequestsModel requestsModel = new RequestsModel();
                                         requestsModel.setEndpoint(obj.getEndpoint());
                                         requestsModel.setStartpoint(obj.getStartpoint());
                                         requestsModel.setImgurl(obj.getProfileimgurl());
-                                        requestsModel.setPostid(obj.getId());
+                                        requestsModel.setPostid(obj.getPhoneno());
                                         requestsModel.setSendername(obj.getFullname());
                                         requestsModel.setSenderid(obj.getUid());
                                         requestsModel.setReciverid(obj.getNoofpassenger());
 
-                                        requestsModel.setId("");
+                                        requestsModel.setId(ref.getKey());
 
-                                        requestsModel.setStatus("");
+                                        requestsModel.setStatus("accepted");
 
-
-                                        DatabaseReference ref = FirebaseDatabase.getInstance().getReference("Accepted Requests").child(obj.getUid()).child(obj.getId());
 
                                         ref.setValue(requestsModel).addOnCompleteListener(new OnCompleteListener<Void>() {
                                             @Override
                                             public void onComplete(@NonNull Task<Void> task) {
-                                                if (task.isSuccessful()){
-                                                    Toast.makeText(context, "Request Accepted", Toast.LENGTH_SHORT).show();
+                                                if (task.isSuccessful()) {
+
+                                                    DatabaseReference ref2 = FirebaseDatabase.getInstance().getReference("Requests").child(obj.getNoofpassenger()).child(obj.getPhoneno()).child(obj.getId());
+
+                                                    ref2.removeValue().addOnCompleteListener(new OnCompleteListener<Void>() {
+                                                        @Override
+                                                        public void onComplete(@NonNull Task<Void> task) {
+
+                                                            if (task.isSuccessful()) {
+
+                                                                Toast.makeText(context, "Request Accepted, list will be updated on next launch", Toast.LENGTH_SHORT).show();
+
+                                                            }
+
+                                                        }
+                                                    });
+
+
                                                 }
                                             }
                                         });
 
+                                        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+
+                                        DatabaseReference ref2 = FirebaseDatabase.getInstance().getReference("Driver Accepted Requests").child(user.getUid()).push();
+
+
+
+                                        ref2.setValue(requestsModel).addOnCompleteListener(new OnCompleteListener<Void>() {
+                                            @Override
+                                            public void onComplete(@NonNull Task<Void> task) {
+                                                if (task.isSuccessful()) {
+//dofrom here
+                                                    DatabaseReference ref2 = FirebaseDatabase.getInstance().getReference("Requests").child(obj.getNoofpassenger()).child(obj.getPhoneno()).child(obj.getId());
+
+//                                                    ref2.removeValue().addOnCompleteListener(new OnCompleteListener<Void>() {
+//                                                        @Override
+//                                                        public void onComplete(@NonNull Task<Void> task) {
+//
+//                                                            if (task.isSuccessful()) {
+//
+//                                                                Toast.makeText(context, "Request Accepted, list will be updated on next launch", Toast.LENGTH_SHORT).show();
+//
+//                                                            }
+//
+//                                                        }
+//                                                    });
+
+
+                                                }
+                                            }
+                                        });
+
+
+
+
                                         break;
 
                                     case "Reject Request":
+                                        DatabaseReference ref3 = FirebaseDatabase.getInstance().getReference("Declined Requests").child(obj.getUid()).push();
 
-                                        System.err.println("myid is"+obj.getNoofpassenger());
-                                       System.err.println("myid is"+ obj.getPhoneno());
-                                        System.err.println("myid is"+obj.getId());
+                                        RequestsModel requestsM = new RequestsModel();
+                                        requestsM.setEndpoint(obj.getEndpoint());
+                                        requestsM.setStartpoint(obj.getStartpoint());
+                                        requestsM.setImgurl(obj.getProfileimgurl());
+                                        requestsM.setPostid(obj.getId());
+                                        requestsM.setSendername(obj.getFullname());
+                                        requestsM.setSenderid(obj.getUid());
+                                        requestsM.setReciverid(obj.getNoofpassenger());
+
+                                        requestsM.setId(ref3.getKey());
+
+                                        requestsM.setStatus("accepted");
+
+                                        System.err.println("myid is" + obj.getNoofpassenger());
+                                        System.err.println("myid is" + obj.getPhoneno());
+                                        System.err.println("myid is" + obj.getId());
 
 
-                                        DatabaseReference ref2 = FirebaseDatabase.getInstance().getReference("Requests").child(obj.getNoofpassenger()).child(obj.getPhoneno()).child(obj.getId());
+                                        ref3.setValue(requestsM).addOnCompleteListener(new OnCompleteListener<Void>() {
+                                            @Override
+                                            public void onComplete(@NonNull Task<Void> task) {
+                                                if (task.isSuccessful()) {
+                                                    DatabaseReference ref2 = FirebaseDatabase.getInstance().getReference("Requests").child(obj.getNoofpassenger()).child(obj.getPhoneno()).child(obj.getId());
 
-                                        ref2.removeValue().addOnCompleteListener(new OnCompleteListener<Void>() {
-                                                    @Override
-                                                    public void onComplete(@NonNull Task<Void> task) {
+                                                    ref2.removeValue().addOnCompleteListener(new OnCompleteListener<Void>() {
+                                                        @Override
+                                                        public void onComplete(@NonNull Task<Void> task) {
 
-                                                        if (task.isSuccessful()){
-                                                            Toast.makeText(context, "Request removed, list will be updated on next launch", Toast.LENGTH_SHORT).show();
+                                                            if (task.isSuccessful()) {
 
+                                                                Toast.makeText(context, "Request removed, list will be updated on next launch", Toast.LENGTH_SHORT).show();
+
+                                                            }
 
                                                         }
-
-                                                    }
-                                                });
-
-
+                                                    });
+                                                }
+                                            }
+                                        });
 
 
                                         break;
@@ -382,6 +450,61 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.MyViewHolder> 
                 holder.mainLayout.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
+
+                        DatabaseReference r = FirebaseDatabase.getInstance().getReference("PostsAsDriver").child(obj.getPhoneno());
+
+
+                        r.addChildEventListener(new ChildEventListener() {
+                            @Override
+                            public void onChildAdded(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
+
+                                PostDriver postDriver = dataSnapshot.getValue(PostDriver.class);
+
+                                Intent intent = new Intent(context, ScreenAfterPostIsSelectedFromList.class);
+                                intent.putExtra("departuredatetime", postDriver.getDeparturedatetime());
+                                intent.putExtra("endpoint", postDriver.getEndpoint());
+                                intent.putExtra("id", postDriver.getId());
+                                intent.putExtra("latend", postDriver.getLatend());
+                                intent.putExtra("latstart", postDriver.getLatstart());
+                                intent.putExtra("lngend", postDriver.getLngend());
+                                intent.putExtra("lngstart", postDriver.getLngstart());
+                                intent.putExtra("noofpassenger", postDriver.getNoofpassenger());
+                                intent.putExtra("offermessage", postDriver.getOffermessage());
+                                intent.putExtra("profileimgurl", postDriver.getProfileimgurl());
+                                intent.putExtra("regulartrip", postDriver.getRegulartrip());
+                                intent.putExtra("roundtrip", postDriver.getRoundtrip());
+                                intent.putExtra("startpoint", postDriver.getStartpoint());
+                                intent.putExtra("uid", postDriver.getUid());
+                                intent.putExtra("vehicaltype", postDriver.getVehicaltype());
+                                intent.putExtra("phoneno", postDriver.getPhoneno());
+                                intent.putExtra("typeOfIntent", "driver");
+                                intent.putExtra("fareamount", postDriver.getFareamount());
+                                intent.putExtra("fullname", postDriver.getFullname());
+                                context.startActivity(intent);
+
+
+                            }
+
+                            @Override
+                            public void onChildChanged(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
+
+                            }
+
+                            @Override
+                            public void onChildRemoved(@NonNull DataSnapshot dataSnapshot) {
+
+                            }
+
+                            @Override
+                            public void onChildMoved(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
+
+                            }
+
+                            @Override
+                            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                            }
+                        });
 
 
                     }
