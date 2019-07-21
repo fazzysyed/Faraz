@@ -1,19 +1,21 @@
 package usama.utech.firebasepractice.Requests;
 
 
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
+import android.widget.ListView;
 
 import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -44,6 +46,10 @@ public class AcceptedRequest extends Fragment {
     private ArrayList<PostRider> listrider = new ArrayList<>();
     private String type;
 
+    ListView listView;
+
+    ArrayList<String> myStringData = new ArrayList<>();
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -64,48 +70,46 @@ public class AcceptedRequest extends Fragment {
         recyclerView = view.findViewById(R.id.rec_acceptedreq_posts);
 
 
+        listView = view.findViewById(R.id.mylistV);
+
         if (type.equals("driver")) {
-            myRef = FirebaseDatabase.getInstance().getReference("Accepted Requests").child(currentUserUid);
 
-            postAdapter = new PostAdapter(true, getActivity(), postDriverArrayList, listrider, "not");
-            recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
-            recyclerView.setAdapter(postAdapter);
+            recyclerView.setVisibility(View.GONE);
+            listView.setVisibility(View.VISIBLE);
 
-            myRef.addChildEventListener(new ChildEventListener() {
+            myRef = FirebaseDatabase.getInstance().getReference("Driver Accepted Requests").child(currentUserUid);
+
+            myRef.addValueEventListener(new ValueEventListener() {
                 @Override
-                public void onChildAdded(@NonNull DataSnapshot dataSnap, @Nullable String s) {
+                public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
 
-                    for (DataSnapshot ds : dataSnap.getChildren()) {
-
-                        RequestsModel mode = ds.getValue(RequestsModel.class);
-
-                        //to avoid nuul exception
-                        postDriverArrayList.add(new PostDriver("", mode.getPostid(), "", mode.getEndpoint(), mode.getSendername(), mode.getId(), "", "", "", "", mode.getReciverid(), "", mode.getImgurl(), "", "", mode.getStartpoint(), mode.getSenderid(), ""));
+                    System.err.println("mydata" + dataSnapshot.getKey());
+                    for (DataSnapshot ds : dataSnapshot.getChildren()) {
 
 
-                        listrider.add(new PostRider("", "", "", "", "", "", "", "", "", "", "", "", "", ""));
 
-                        postAdapter.notifyDataSetChanged();
-                        System.err.println("driver oput is " + mode.getSendername());
+
+
+                        myStringData.add(ds.getKey());
+
 
                     }
 
+                    ArrayAdapter<String> arrayAdapter = new ArrayAdapter<>(getActivity(), android.R.layout.simple_list_item_1, myStringData);
 
-                }
+                    listView.setAdapter(arrayAdapter);
 
+                    listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                        @Override
+                        public void onItemClick(AdapterView<?> parent, View view, int position,
+                                                long id) {
+                            Intent intent = new Intent(getActivity(), AcceptActivityPart2.class);
 
-                @Override
-                public void onChildChanged(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
+                            intent.putExtra("myid", myStringData.get(position));
+                            startActivity(intent);
+                        }
+                    });
 
-                }
-
-                @Override
-                public void onChildRemoved(@NonNull DataSnapshot dataSnapshot) {
-
-                }
-
-                @Override
-                public void onChildMoved(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
 
                 }
 
@@ -114,7 +118,13 @@ public class AcceptedRequest extends Fragment {
 
                 }
             });
-        } else if (type.equals("rider")) {
+
+
+        }
+        else if (type.equals("rider")) {
+
+            recyclerView.setVisibility(View.VISIBLE);
+            listView.setVisibility(View.GONE);
 
             myRef = FirebaseDatabase.getInstance().getReference("Accepted Requests").child(currentUserUid);
 
@@ -199,7 +209,6 @@ public class AcceptedRequest extends Fragment {
 //            });
 
         }
-
 
         return view;
 

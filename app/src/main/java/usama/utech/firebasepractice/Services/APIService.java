@@ -7,6 +7,7 @@ import retrofit2.http.Headers;
 import retrofit2.http.POST;
 import usama.utech.firebasepractice.Notifications.MyResponse;
 import usama.utech.firebasepractice.Notifications.Sender;
+import usama.utech.firebasepractice.Notifications.SenderMessageForRequest;
 
 public interface APIService {
     @Headers(
@@ -18,4 +19,7 @@ public interface APIService {
 
     @POST("fcm/send")
     Call<MyResponse> sendNotification(@Body Sender body);
+
+    @POST("fcm/send")
+    Call<MyResponse> sendRequestNotification(@Body SenderMessageForRequest body);
 }

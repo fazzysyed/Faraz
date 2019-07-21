@@ -21,6 +21,8 @@ import com.google.firebase.messaging.FirebaseMessagingService;
 import com.google.firebase.messaging.RemoteMessage;
 
 import usama.utech.firebasepractice.ChatStuff.MessageActivity;
+import usama.utech.firebasepractice.HomePageMap;
+import usama.utech.firebasepractice.R;
 
 public class MyFirebaseMessaging extends FirebaseMessagingService {
 
@@ -53,12 +55,11 @@ public class MyFirebaseMessaging extends FirebaseMessagingService {
         super.onMessageReceived(remoteMessage);
 
 
-
         String sented = remoteMessage.getData().get("sented");
         String user = remoteMessage.getData().get("user");
 
 
-        System.err.println("notifyme"+sented);
+        System.err.println("notifyme" + sented);
         SharedPreferences prefs = getSharedPreferences("saveddata", MODE_PRIVATE);
 
 
@@ -75,6 +76,27 @@ public class MyFirebaseMessaging extends FirebaseMessagingService {
                 }
             }
         }
+
+        String title = remoteMessage.getData().get("title");
+        if (title.equals("request")) {
+
+            String reciver = remoteMessage.getData().get("reciver");
+            String drivername = remoteMessage.getData().get("drivername");
+
+            if (reciver.equals(FirebaseAuth.getInstance().getCurrentUser().getUid())){
+
+
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                    sendOreoNotificationforrequest(drivername,reciver);
+                } else {
+                    sendNotificationforrequest(drivername,reciver);
+                }
+
+
+            }
+
+        }
+
     }
 
     private void sendOreoNotification(RemoteMessage remoteMessage) {
@@ -139,4 +161,59 @@ public class MyFirebaseMessaging extends FirebaseMessagingService {
 
         noti.notify(i, builder.build());
     }
+
+
+
+
+    private void sendOreoNotificationforrequest(String Dname,String rece) {
+
+
+        int j = Integer.parseInt(rece.replaceAll("[\\D]", ""));
+        Intent intent = new Intent(this, HomePageMap.class);
+              intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+        PendingIntent pendingIntent = PendingIntent.getActivity(this, j, intent, PendingIntent.FLAG_ONE_SHOT);
+        Uri defaultSound = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
+
+        OreoNotification oreoNotification = new OreoNotification(this);
+        Notification.Builder builder = oreoNotification.getOreoNotification("Request", Dname+" driver has started the ride so make sure you are at the start location", pendingIntent,
+                defaultSound, String.valueOf(getResources().getDrawable(R.drawable.utube)));
+
+        int i = 0;
+        if (j > 0) {
+            i = j;
+        }
+
+        oreoNotification.getManager().notify(i, builder.build());
+
+    }
+
+    private void sendNotificationforrequest(String Dname,String rece) {
+
+
+
+
+        int j = Integer.parseInt(rece.replaceAll("[\\D]", ""));
+        Intent intent = new Intent(this, HomePageMap.class);
+
+        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+        PendingIntent pendingIntent = PendingIntent.getActivity(this, j, intent, PendingIntent.FLAG_ONE_SHOT);
+
+        Uri defaultSound = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
+        NotificationCompat.Builder builder = new NotificationCompat.Builder(this)
+                .setSmallIcon(R.drawable.utube)
+                .setContentTitle("Request")
+                .setContentText(Dname+" driver has started the ride so make sure you are at the start location")
+                .setAutoCancel(true)
+                .setSound(defaultSound)
+                .setContentIntent(pendingIntent);
+        NotificationManager noti = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+
+        int i = 0;
+        if (j > 0) {
+            i = j;
+        }
+
+        noti.notify(i, builder.build());
+    }
+
 }
