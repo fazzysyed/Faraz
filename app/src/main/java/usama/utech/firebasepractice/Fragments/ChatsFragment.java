@@ -28,8 +28,8 @@ import usama.utech.firebasepractice.Adatpters.UserAdapter;
 import usama.utech.firebasepractice.ModelClasses.Chatlist;
 import usama.utech.firebasepractice.ModelClasses.DriverModel;
 import usama.utech.firebasepractice.ModelClasses.RiderModel;
-import usama.utech.firebasepractice.Notifications.Token;
 import usama.utech.firebasepractice.ModelClasses.User;
+import usama.utech.firebasepractice.Notifications.Token;
 import usama.utech.firebasepractice.R;
 
 import static android.content.Context.MODE_PRIVATE;
@@ -49,7 +49,6 @@ public class ChatsFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_chats, container, false);
-
 
 
         SharedPreferences prefs = getActivity().getSharedPreferences("saveddata", MODE_PRIVATE);
@@ -110,7 +109,7 @@ public class ChatsFragment extends Fragment {
                         for (Chatlist chatlist : usersList) {
                             if (user.getUid().equals(chatlist.getId())) {
 
-                                mUsers.add(new User(user.getUid(),user.getFullname(),user.getProfileimageurl(),user.getOnline()));
+                                mUsers.add(new User(user.getUid(), user.getFullname(), user.getProfileimageurl(), user.getOnline()));
 
 
                             }
@@ -125,7 +124,7 @@ public class ChatsFragment extends Fragment {
 
                 }
             });
-        }else   if (type_user.equals("driver")) {
+        } else if (type_user.equals("driver")) {
 
 
             mUsers = new ArrayList<>();
@@ -138,9 +137,9 @@ public class ChatsFragment extends Fragment {
                         RiderModel user = snapshot.getValue(RiderModel.class);
                         for (Chatlist chatlist : usersList) {
                             if (user.getUid().equals(chatlist.getId())) {
-                                mUsers.add(new User(user.getUid(),user.getFullname(),user.getProfileimageurl(),user.getOnline()));
+                                mUsers.add(new User(user.getUid(), user.getFullname(), user.getProfileimageurl(), user.getOnline()));
 
-                                System.err.println("userdatac "+user.getFullname());
+                                System.err.println("userdatac " + user.getFullname());
 
                             }
                         }

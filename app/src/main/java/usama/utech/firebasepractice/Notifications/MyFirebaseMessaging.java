@@ -20,6 +20,7 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.messaging.FirebaseMessagingService;
 import com.google.firebase.messaging.RemoteMessage;
 
+import usama.utech.firebasepractice.ChatStuff.MainActivity;
 import usama.utech.firebasepractice.ChatStuff.MessageActivity;
 import usama.utech.firebasepractice.HomePageMap;
 import usama.utech.firebasepractice.R;
@@ -83,13 +84,13 @@ public class MyFirebaseMessaging extends FirebaseMessagingService {
             String reciver = remoteMessage.getData().get("reciver");
             String drivername = remoteMessage.getData().get("drivername");
 
-            if (reciver.equals(FirebaseAuth.getInstance().getCurrentUser().getUid())){
+            if (reciver.equals(FirebaseAuth.getInstance().getCurrentUser().getUid())) {
 
 
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-                    sendOreoNotificationforrequest(drivername,reciver);
+                    sendOreoNotificationforrequest(drivername, reciver);
                 } else {
-                    sendNotificationforrequest(drivername,reciver);
+                    sendNotificationforrequest(drivername, reciver);
                 }
 
 
@@ -97,8 +98,34 @@ public class MyFirebaseMessaging extends FirebaseMessagingService {
 
         }
 
+
+
+        createNotification(remoteMessage.getNotification().getBody());
+
     }
 
+    private void createNotification( String messageBody) {
+
+        Intent intent = new Intent( this , MainActivity. class );
+        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+        PendingIntent resultIntent = PendingIntent.getActivity( this , 0, intent,
+                PendingIntent.FLAG_ONE_SHOT);
+
+        Uri notificationSoundURI = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
+        NotificationCompat.Builder mNotificationBuilder = new NotificationCompat.Builder( this)
+                .setSmallIcon(R.mipmap.ic_launcher_round)
+                .setContentTitle("Phone Auth")
+                .setContentText(messageBody)
+
+                .setAutoCancel( true )
+                .setSound(notificationSoundURI)
+                .setContentIntent(resultIntent);
+
+        NotificationManager notificationManager =
+                (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+
+        notificationManager.notify(0, mNotificationBuilder.build());
+    }
     private void sendOreoNotification(RemoteMessage remoteMessage) {
         String user = remoteMessage.getData().get("user");
         String icon = remoteMessage.getData().get("icon");
@@ -163,19 +190,17 @@ public class MyFirebaseMessaging extends FirebaseMessagingService {
     }
 
 
-
-
-    private void sendOreoNotificationforrequest(String Dname,String rece) {
+    private void sendOreoNotificationforrequest(String Dname, String rece) {
 
 
         int j = Integer.parseInt(rece.replaceAll("[\\D]", ""));
         Intent intent = new Intent(this, HomePageMap.class);
-              intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
         PendingIntent pendingIntent = PendingIntent.getActivity(this, j, intent, PendingIntent.FLAG_ONE_SHOT);
         Uri defaultSound = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
 
         OreoNotification oreoNotification = new OreoNotification(this);
-        Notification.Builder builder = oreoNotification.getOreoNotification("Request", Dname+" driver has started the ride so make sure you are at the start location", pendingIntent,
+        Notification.Builder builder = oreoNotification.getOreoNotification("Request", Dname + " driver has started the ride so make sure you are at the start location", pendingIntent,
                 defaultSound, String.valueOf(getResources().getDrawable(R.drawable.utube)));
 
         int i = 0;
@@ -187,9 +212,7 @@ public class MyFirebaseMessaging extends FirebaseMessagingService {
 
     }
 
-    private void sendNotificationforrequest(String Dname,String rece) {
-
-
+    private void sendNotificationforrequest(String Dname, String rece) {
 
 
         int j = Integer.parseInt(rece.replaceAll("[\\D]", ""));
@@ -202,7 +225,7 @@ public class MyFirebaseMessaging extends FirebaseMessagingService {
         NotificationCompat.Builder builder = new NotificationCompat.Builder(this)
                 .setSmallIcon(R.drawable.utube)
                 .setContentTitle("Request")
-                .setContentText(Dname+" driver has started the ride so make sure you are at the start location")
+                .setContentText(Dname + " driver has started the ride so make sure you are at the start location")
                 .setAutoCancel(true)
                 .setSound(defaultSound)
                 .setContentIntent(pendingIntent);

@@ -138,7 +138,7 @@ public class UsersFragment extends Fragment {
                     for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
                         RiderModel user = snapshot.getValue(RiderModel.class);
 
-                        System.err.println("riderData"+user.getFullname());
+                        System.err.println("riderData" + user.getFullname());
                         assert user != null;
                         assert fuser != null;
                         if (!user.getUid().equals(fuser.getUid())) {
@@ -177,13 +177,13 @@ public class UsersFragment extends Fragment {
                             DriverModel user = snapshot.getValue(DriverModel.class);
 
 
-                            System.err.printf("mydata"+user.getFullname());
+                            System.err.printf("mydata" + user.getFullname());
 
-                        //    if (!user.getUid().equals(firebaseUser.getUid())) {
+                            //    if (!user.getUid().equals(firebaseUser.getUid())) {
 
 
-                                mUsers.add(new User(user.getUid(), user.getFullname(), user.getProfileimageurl(), user.getOnline()));
-                          //  }
+                            mUsers.add(new User(user.getUid(), user.getFullname(), user.getProfileimageurl(), user.getOnline()));
+                            //  }
 
                         }
 

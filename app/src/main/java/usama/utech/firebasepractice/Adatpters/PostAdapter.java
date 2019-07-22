@@ -1,6 +1,5 @@
 package usama.utech.firebasepractice.Adatpters;
 
-import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.view.LayoutInflater;
@@ -273,8 +272,7 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.MyViewHolder> 
                         .into(holder.user_profile_img_rec_post);
             }
 
-        }
-        else if (isProfile.equals("not")) {
+        } else if (isProfile.equals("not")) {
 
             if (isDriverP) {
 
@@ -296,7 +294,6 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.MyViewHolder> 
                         //registering popup with OnMenuItemClickListener
                         popup.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
                             public boolean onMenuItemClick(MenuItem item) {
-
 
 
                                 switch (item.getTitle().toString()) {
@@ -526,8 +523,7 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.MyViewHolder> 
                         .error(R.drawable.ic_close)
                         .into(holder.user_profile_img_rec_post);
             }
-        }
-        else if (isProfile.equals("Daccept")) {
+        } else if (isProfile.equals("Daccept")) {
 
             if (isDriverP) {
 
@@ -539,8 +535,6 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.MyViewHolder> 
                     public boolean onLongClick(View v) {
 
                         final FirebaseUser fuser = FirebaseAuth.getInstance().getCurrentUser();
-
-
 
 
                         //TODO
@@ -586,7 +580,6 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.MyViewHolder> 
 
                             }
                         });
-
 
 
                         return false;

@@ -4,7 +4,7 @@ package usama.utech.firebasepractice.ModelClasses;
 public class DriverModel {
 
 
-    String uid,email, status, reported, fullname, cnicno, phoneno, provence, city, designetion, age, vehicalname, vehicalnoplate, verified, currentlogitude, currentlatitude,
+    String uid, email, status, reported, fullname, cnicno, phoneno, provence, city, designetion, age, vehicalname, vehicalnoplate, verified, currentlogitude, currentlatitude,
             profileimageurl, gender, vehicaltype, online, locationsharing;
 
     public DriverModel() {

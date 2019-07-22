@@ -1,10 +1,8 @@
 package usama.utech.firebasepractice.ModelClasses;
 
-import java.util.Map;
+public class RequestsModel {
 
-public class RequestsModel  {
-
-    String id, senderid, reciverid, postid, sendername, imgurl,startpoint,endpoint,status;
+    String id, senderid, reciverid, postid, sendername, imgurl, startpoint, endpoint, status;
 
     public RequestsModel() {
     }

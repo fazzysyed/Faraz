@@ -30,7 +30,6 @@ import de.hdodenhof.circleimageview.CircleImageView;
 import usama.utech.firebasepractice.Fragments.ChatsFragment;
 import usama.utech.firebasepractice.Fragments.UsersFragment;
 import usama.utech.firebasepractice.ModelClasses.Chat;
-import usama.utech.firebasepractice.ModelClasses.DriverModel;
 import usama.utech.firebasepractice.R;
 
 public class MainActivity extends AppCompatActivity {
@@ -63,16 +62,13 @@ public class MainActivity extends AppCompatActivity {
         firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
 
 
-
-
-
         SharedPreferences prefs = getSharedPreferences("saveddata", MODE_PRIVATE);
 
         type_user = prefs.getString("type", "");
 
         uid = prefs.getString("uid", "");
-        fullname = prefs.getString("fullname","");
-        profileimageurl = prefs.getString("profileimageurl","");
+        fullname = prefs.getString("fullname", "");
+        profileimageurl = prefs.getString("profileimageurl", "");
 
         username.setText(fullname);
         if (profileimageurl.equals("")) {

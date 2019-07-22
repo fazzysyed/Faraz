@@ -54,7 +54,6 @@ public class DeclinedRequests extends Fragment {
         View view = inflater.inflate(R.layout.fragment_declined_requests, container, false);
 
 
-
         SharedPreferences prefs = getActivity().getSharedPreferences("saveddata", MODE_PRIVATE);
         currentUserUid = prefs.getString("uid", "");
         type = prefs.getString("type", "");
@@ -65,7 +64,7 @@ public class DeclinedRequests extends Fragment {
         if (type.equals("driver")) {
             myRef = FirebaseDatabase.getInstance().getReference("Declined Requests").child(currentUserUid);
 
-            postAdapter = new PostAdapter(true,getActivity(), postDriverArrayList, listrider,"not");
+            postAdapter = new PostAdapter(true, getActivity(), postDriverArrayList, listrider, "not");
             recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
             recyclerView.setAdapter(postAdapter);
 
@@ -81,10 +80,7 @@ public class DeclinedRequests extends Fragment {
                     postDriverArrayList.add(new PostDriver("", mode.getPostid(), "", mode.getEndpoint(), mode.getSendername(), mode.getId(), "", "", "", "", mode.getReciverid(), "", mode.getImgurl(), "", "", mode.getStartpoint(), mode.getSenderid(), ""));
 
 
-
-
-
-                    listrider.add(new PostRider("", "", "", "", "", "", "", "", "", "", "", "","", ""));
+                    listrider.add(new PostRider("", "", "", "", "", "", "", "", "", "", "", "", "", ""));
 
                     postAdapter.notifyDataSetChanged();
 
@@ -120,7 +116,7 @@ public class DeclinedRequests extends Fragment {
 
             myRef = FirebaseDatabase.getInstance().getReference("Declined Requests").child(currentUserUid);
 
-            postAdapter = new PostAdapter(false,getActivity(), postDriverArrayList, listrider,"not");
+            postAdapter = new PostAdapter(false, getActivity(), postDriverArrayList, listrider, "not");
             recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
             recyclerView.setAdapter(postAdapter);
 
@@ -135,16 +131,14 @@ public class DeclinedRequests extends Fragment {
 
 
                     RequestsModel mode = dataSnapshot.getValue(RequestsModel.class);
-                    System.err.println("mydata"+mode.getStartpoint());
+                    System.err.println("mydata" + mode.getStartpoint());
 
                     listrider.add(new PostRider("", "", mode.getEndpoint(), mode.getSendername(), mode.getId(), "", "", "", "", mode.getImgurl(), "", "", mode.getStartpoint(), mode.getSenderid()));
-
 
 
                     postAdapter.notifyDataSetChanged();
 
                     //}
-
 
 
                 }

@@ -161,29 +161,28 @@ public class ScreenAfterPostIsSelectedFromList extends AppCompatActivity impleme
 
         int len = split.length;
 
-            int len2 = array_of_txt.length;
+        int len2 = array_of_txt.length;
 
-            for (int i = 0; i < len; i++) {
+        for (int i = 0; i < len; i++) {
 
-                for (int j = 0; j < len2; j++) {
+            for (int j = 0; j < len2; j++) {
 
-                    if (split[i].toLowerCase().equals(array_of_txt[j].getText().toString().toLowerCase())) {
+                if (split[i].toLowerCase().equals(array_of_txt[j].getText().toString().toLowerCase())) {
 
-                        array_of_txt[j].setVisibility(View.VISIBLE);
-                    }
-
-
+                    array_of_txt[j].setVisibility(View.VISIBLE);
                 }
+
 
             }
 
+        }
 
 
         String split2[] = departuredatetime.split(",");
 
-        if (split2.length < 2 ) {
+        if (split2.length < 2) {
 
-            System.err.println("time isa"+split2[0]+"----"+split2[1]);
+            System.err.println("time isa" + split2[0] + "----" + split2[1]);
 
             startTimeDetailsDate.setText(split2[0]);
             startTimeDetailsTime.setText(split2[1]);
@@ -359,7 +358,6 @@ public class ScreenAfterPostIsSelectedFromList extends AppCompatActivity impleme
                 if (!uid2.equals("")) {
                     DatabaseReference ref = FirebaseDatabase.getInstance().getReference("Requests")
                             .child(uid).child(id).push();
-
 
 
                     HashMap<String, Object> map = new HashMap<>();

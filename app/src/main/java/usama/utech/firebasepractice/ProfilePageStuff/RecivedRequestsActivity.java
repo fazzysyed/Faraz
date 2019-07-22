@@ -1,9 +1,7 @@
 package usama.utech.firebasepractice.ProfilePageStuff;
 
-import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.Bundle;
-
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -29,14 +27,13 @@ import usama.utech.firebasepractice.R;
 public class RecivedRequestsActivity extends AppCompatActivity {
     PostAdapter postAdapter;
     ArrayList<PostDriver> postDriverArrayList = new ArrayList<>();
-
+    Toolbar toolbar;
     private RecyclerView recyclerView;
     private DatabaseReference myRef;
     private ArrayList<PostRider> listrider = new ArrayList<>();
     private String currentUserUid;
     private String type_user;
     private String postId;
-    Toolbar toolbar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -62,14 +59,12 @@ public class RecivedRequestsActivity extends AppCompatActivity {
         myRef = FirebaseDatabase.getInstance().getReference("Requests").child(currentUserUid).child(postId);
 
 
-
         if (type_user.equals("driver")) {
 
 
-
-                postAdapter = new PostAdapter(true,getApplicationContext(), postDriverArrayList, listrider,"not");
-        recyclerView.setLayoutManager(new LinearLayoutManager(getApplicationContext()));
-        recyclerView.setAdapter(postAdapter);
+            postAdapter = new PostAdapter(true, getApplicationContext(), postDriverArrayList, listrider, "not");
+            recyclerView.setLayoutManager(new LinearLayoutManager(getApplicationContext()));
+            recyclerView.setAdapter(postAdapter);
 
 
             myRef.addChildEventListener(new ChildEventListener() {
@@ -81,12 +76,9 @@ public class RecivedRequestsActivity extends AppCompatActivity {
                     postDriverArrayList.add(new PostDriver("", mode.getPostid(), "", mode.getEndpoint(), mode.getSendername(), mode.getId(), "", "", "", "", mode.getReciverid(), "", mode.getImgurl(), "", "", mode.getStartpoint(), mode.getSenderid(), ""));
 
 
+                    listrider.add(new PostRider("", "", "", "", "", "", "", "", "", "", "", "", "", ""));
 
-
-
-                    listrider.add(new PostRider("", "", "", "", "", "", "", "", "", "", "", "","", ""));
-
-                    toolbar.setTitle("Recived Requests For Post ("+postDriverArrayList.size()+")");
+                    toolbar.setTitle("Recived Requests For Post (" + postDriverArrayList.size() + ")");
                     postAdapter.notifyDataSetChanged();
 
                 }
@@ -115,7 +107,7 @@ public class RecivedRequestsActivity extends AppCompatActivity {
 
         } else if (type_user.equals("rider")) {
 
-            postAdapter = new PostAdapter(false,getApplicationContext(), postDriverArrayList, listrider,"not");
+            postAdapter = new PostAdapter(false, getApplicationContext(), postDriverArrayList, listrider, "not");
             recyclerView.setLayoutManager(new LinearLayoutManager(getApplicationContext()));
             recyclerView.setAdapter(postAdapter);
             myRef.addChildEventListener(new ChildEventListener() {
@@ -132,7 +124,7 @@ public class RecivedRequestsActivity extends AppCompatActivity {
 
                     listrider.add(new PostRider("", "", mode.getEndpoint(), mode.getSendername(), postId, "", "", "", "", mode.getImgurl(), "", "", mode.getStartpoint(), mode.getSenderid()));
 
-                    toolbar.setTitle("Recived Requests For Post ("+listrider.size()+")");
+                    toolbar.setTitle("Recived Requests For Post (" + listrider.size() + ")");
 
                     postAdapter.notifyDataSetChanged();
 

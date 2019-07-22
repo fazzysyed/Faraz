@@ -48,7 +48,6 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 import usama.utech.firebasepractice.Adatpters.MessageAdapter;
-import usama.utech.firebasepractice.Services.APIService;
 import usama.utech.firebasepractice.ModelClasses.Chat;
 import usama.utech.firebasepractice.ModelClasses.DriverModel;
 import usama.utech.firebasepractice.ModelClasses.RiderModel;
@@ -58,6 +57,7 @@ import usama.utech.firebasepractice.Notifications.MyResponse;
 import usama.utech.firebasepractice.Notifications.Sender;
 import usama.utech.firebasepractice.Notifications.Token;
 import usama.utech.firebasepractice.R;
+import usama.utech.firebasepractice.Services.APIService;
 
 public class MessageActivity extends AppCompatActivity {
 
@@ -91,7 +91,7 @@ public class MessageActivity extends AppCompatActivity {
     boolean notify = false;
     private String type_user;
     private String uid;
-    private String audioFileName="";
+    private String audioFileName = "";
 
 
     @SuppressLint("ClickableViewAccessibility")
@@ -144,7 +144,7 @@ public class MessageActivity extends AppCompatActivity {
 
                     fileName = Environment.getExternalStorageDirectory().getAbsolutePath();
 
-                    audioFileName  = System.currentTimeMillis() + ".3gp";
+                    audioFileName = System.currentTimeMillis() + ".3gp";
                     fileName += "/" + audioFileName;
 
                     startRecording();
@@ -232,7 +232,6 @@ public class MessageActivity extends AppCompatActivity {
             seenMessage(userid);
 
         }
-
 
 
         //make user online

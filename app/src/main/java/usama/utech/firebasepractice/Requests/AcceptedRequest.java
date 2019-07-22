@@ -40,15 +40,13 @@ public class AcceptedRequest extends Fragment {
     String currentUserUid;
     PostAdapter postAdapter;
     ArrayList<PostDriver> postDriverArrayList = new ArrayList<>();
+    ListView listView;
+    ArrayList<String> myStringData = new ArrayList<>();
     private MyAddedPosts.OnFragmentInteractionListener mListener;
     private RecyclerView recyclerView;
     private DatabaseReference myRef;
     private ArrayList<PostRider> listrider = new ArrayList<>();
     private String type;
-
-    ListView listView;
-
-    ArrayList<String> myStringData = new ArrayList<>();
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -87,9 +85,6 @@ public class AcceptedRequest extends Fragment {
                     for (DataSnapshot ds : dataSnapshot.getChildren()) {
 
 
-
-
-
                         myStringData.add(ds.getKey());
 
 
@@ -120,8 +115,7 @@ public class AcceptedRequest extends Fragment {
             });
 
 
-        }
-        else if (type.equals("rider")) {
+        } else if (type.equals("rider")) {
 
             recyclerView.setVisibility(View.VISIBLE);
             listView.setVisibility(View.GONE);

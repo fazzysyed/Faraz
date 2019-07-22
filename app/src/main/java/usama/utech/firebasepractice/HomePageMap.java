@@ -36,6 +36,10 @@ import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.directions.route.Route;
+import com.directions.route.RouteException;
+import com.directions.route.Routing;
+import com.directions.route.RoutingListener;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.location.LocationListener;
@@ -45,13 +49,20 @@ import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.MapStyleOptions;
+import com.google.android.gms.maps.model.MarkerOptions;
+import com.google.android.gms.maps.model.Polyline;
+import com.google.android.gms.maps.model.PolylineOptions;
 import com.google.android.material.bottomappbar.BottomAppBar;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.navigation.NavigationView;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 import com.karumi.dexter.Dexter;
 import com.karumi.dexter.MultiplePermissionsReport;
 import com.karumi.dexter.PermissionToken;
@@ -67,6 +78,7 @@ import java.util.Locale;
 import usama.utech.firebasepractice.AllPostsWork.ListAllPosts;
 import usama.utech.firebasepractice.AllPostsWork.PostYourTravel;
 import usama.utech.firebasepractice.ChatStuff.MainActivity;
+import usama.utech.firebasepractice.ModelClasses.StartRideRequestModel;
 import usama.utech.firebasepractice.ModelClasses.User;
 import usama.utech.firebasepractice.ProfilePageStuff.ProfilePage;
 import usama.utech.firebasepractice.Requests.AllRequests;
@@ -84,6 +96,7 @@ public class HomePageMap extends AppCompatActivity implements OnMapReadyCallback
     BottomAppBar bottomapp;
     FirebaseDatabase database;
     DatabaseReference myRef;
+    FirebaseUser fuser;
     private EditText name;
     private EditText age;
     private Button addData;
@@ -98,16 +111,21 @@ public class HomePageMap extends AppCompatActivity implements OnMapReadyCallback
     private com.google.android.gms.location.LocationListener listener;
     private long UPDATE_INTERVAL = 2 * 1000;  /* 10 secs */
     private long FASTEST_INTERVAL = 20000; /* 20 sec */
-
     private LocationManager locationManager;
     private LatLng latLng;
     private boolean isPermission;
     private DrawerLayout drawer;
     private DatabaseReference reference;
-
-    FirebaseUser fuser;
     private String uid;
     private String fullname;
+
+    private List<Polyline> polylines;
+    ArrayList<StartRideRequestModel> rideRequestModelArrayList = new ArrayList<>();
+
+    private static final int[] COLORS = new int[]{R.color.primary_dark1, R.color.primary1, R.color.primary_light1, R.color.accent1, R.color.primary_dark};
+    private LatLng start;
+    private LatLng end;
+    private boolean showRides = true;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -182,12 +200,12 @@ public class HomePageMap extends AppCompatActivity implements OnMapReadyCallback
                     .into(ImageViewNav);
 
             EmailUserTxt.setText(email_user);
-            TypeUserTxt.setText(fullname+"\n\t\t\t"+type_user);
+            TypeUserTxt.setText(fullname + "\n\t\t\t" + type_user);
 
 
         } else if (type_user.equals("driver")) {
             EmailUserTxt.setText(email_user);
-            TypeUserTxt.setText(fullname+"\n\t\t\t"+type_user);
+            TypeUserTxt.setText(fullname + "\n\t\t\t" + type_user);
             Picasso.get()
                     .load(photo_url_user)
                     .placeholder(R.drawable.ic_launcher_background)
@@ -211,6 +229,20 @@ public class HomePageMap extends AppCompatActivity implements OnMapReadyCallback
 
     @Override
     public void onMapReady(GoogleMap googleMap) {
+
+
+        try {
+            boolean isSucess = googleMap.setMapStyle(MapStyleOptions.loadRawResourceStyle(this, R.raw.map));
+            if (!isSucess) {
+                Toast.makeText(this, "Map style error", Toast.LENGTH_SHORT).show();
+            }
+        } catch (Exception e) {
+
+            e.printStackTrace();
+
+        }
+
+
         mMap = googleMap;
 
         mMap.setMapType(GoogleMap.MAP_TYPE_NORMAL);
@@ -355,26 +387,26 @@ public class HomePageMap extends AppCompatActivity implements OnMapReadyCallback
         String uid = prefs.getString("uid", "");
 
 
-       if (type_user.equals("driver")) {
-           myRef = database.getReference("Drivers").child(uid);
+        if (type_user.equals("driver")) {
+            myRef = database.getReference("Drivers").child(uid);
 
 
-           HashMap<String, String> updateLocationMap = new HashMap<>();
-           updateLocationMap.put("currentlogitude", String.valueOf(location.getLongitude()));
-           updateLocationMap.put("currentlatitude", String.valueOf(location.getLatitude()));
+            HashMap<String, String> updateLocationMap = new HashMap<>();
+            updateLocationMap.put("currentlogitude", String.valueOf(location.getLongitude()));
+            updateLocationMap.put("currentlatitude", String.valueOf(location.getLatitude()));
 
-           myRef.updateChildren((HashMap) updateLocationMap);
-       }else if (type_user.equals("rider")){
+            myRef.updateChildren((HashMap) updateLocationMap);
+        } else if (type_user.equals("rider")) {
 
-           myRef = database.getReference("Riders").child(uid);
+            myRef = database.getReference("Riders").child(uid);
 
 
-           HashMap<String, String> updateLocationMap = new HashMap<>();
-           updateLocationMap.put("currentlogitude", String.valueOf(location.getLongitude()));
-           updateLocationMap.put("currentlatitude", String.valueOf(location.getLatitude()));
+            HashMap<String, String> updateLocationMap = new HashMap<>();
+            updateLocationMap.put("currentlogitude", String.valueOf(location.getLongitude()));
+            updateLocationMap.put("currentlatitude", String.valueOf(location.getLatitude()));
 
-           myRef.updateChildren((HashMap) updateLocationMap);
-       }
+            myRef.updateChildren((HashMap) updateLocationMap);
+        }
 
     }
 
@@ -564,21 +596,180 @@ public class HomePageMap extends AppCompatActivity implements OnMapReadyCallback
 
         if (item.getItemId() == R.id.navigation_explore) {
 
+            startActivity(new Intent(getApplicationContext(), ListAllPosts.class));
+            finish();
 
         }
 
         if (item.getItemId() == R.id.navigation_profile) {
 
 
-            startActivity(new Intent(getApplicationContext(), ListAllPosts.class));
+            if (type_user.equals("rider")) {
+                AlertDialog.Builder builder1 = new AlertDialog.Builder(HomePageMap.this);
+                builder1.setMessage("Are You Sure You Want to Show Current Rides?");
+                builder1.setCancelable(true);
+
+                builder1.setPositiveButton(
+                        "Show",
+                        new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int id) {
+                                dialog.cancel();
+                                showRides = true;
+
+                                // sendrequesttodriversforridestart();
+
+                                if (showRides) {
+
+                                    showCurrentRides();
+                                }
+
+                            }
+                        });
+
+                builder1.setNegativeButton(
+                        "Stop Showing",
+                        new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int id) {
+                                dialog.cancel();
+                                stopShowingCurrentRides();
+                            }
+                        });
+
+                AlertDialog alert11 = builder1.create();
+                alert11.show();
+            } else {
+                Toast.makeText(this, "You are not a Rider", Toast.LENGTH_SHORT).show();
+            }
+
         }
         if (item.getItemId() == R.id.navigation_profile22) {
 
-
+            startActivity(new Intent(getApplicationContext(), ProfilePage.class));
+            finish();
         }
 
         return super.onOptionsItemSelected(item);
     }
+
+
+    void showCurrentRides() {
+
+
+        DatabaseReference re = FirebaseDatabase.getInstance().getReference("CurrentRides");
+
+        re.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+
+
+                for (DataSnapshot ds : dataSnapshot.getChildren()) {
+
+                    final StartRideRequestModel requestModel = ds.getValue(StartRideRequestModel.class);
+
+                    // rideRequestModelArrayList.add(requestModel);
+
+                    System.err.println("mylat" + requestModel.getSourcelat());
+
+                    start = new LatLng(Double.parseDouble(requestModel.getSourcelat()), Double.parseDouble(requestModel.getSourcelng()));
+
+                    end = new LatLng(Double.parseDouble(requestModel.getDestenationlat()), Double.parseDouble(requestModel.getDestenationlng()));
+
+                    if (showRides) {
+                        Routing routing = new Routing.Builder()
+                                .travelMode(Routing.TravelMode.DRIVING)
+                                .withListener(new RoutingListener() {
+                                    @Override
+                                    public void onRoutingFailure(RouteException e) {
+                                        Toast.makeText(HomePageMap.this, "failer", Toast.LENGTH_SHORT).show();
+
+
+                                    }
+
+                                    @Override
+                                    public void onRoutingStart() {
+                                        Toast.makeText(HomePageMap.this, "start", Toast.LENGTH_SHORT).show();
+
+                                    }
+
+                                    @Override
+                                    public void onRoutingSuccess(ArrayList<Route> route, int position) {
+                                        Toast.makeText(HomePageMap.this, "Success", Toast.LENGTH_SHORT).show();
+
+
+//                        if(polylines.size()>0) {
+//                            for (Polyline poly : polylines) {
+//                                poly.remove();
+//                            }
+//                        }
+
+                                        polylines = new ArrayList<>();
+                                        //add route(s) to the map.
+                                        for (int i = 0; i < route.size(); i++) {
+
+                                            //In case of more than 5 alternative routes
+                                            int colorIndex = i % COLORS.length;
+
+                                            PolylineOptions polyOptions = new PolylineOptions();
+                                            polyOptions.color(getResources().getColor(COLORS[colorIndex]));
+                                            polyOptions.width(10 + i * 3);
+                                            polyOptions.addAll(route.get(i).getPoints());
+                                            Polyline polyline = mMap.addPolyline(polyOptions);
+                                            polylines.add(polyline);
+
+                                            Toast.makeText(getApplicationContext(), "Route " + (i + 1) + ": distance - " + route.get(i).getDistanceValue() + ": duration - " + route.get(i).getDurationValue(), Toast.LENGTH_SHORT).show();
+
+
+                                        }
+
+                                        // Start marker
+                                        mMap.addMarker(new MarkerOptions().position(start).title("Start Point"));
+
+                                        // End marker
+                                        mMap.addMarker(new MarkerOptions().position(end).title("End Point"));
+
+
+//                                  CameraPosition cameraPosition = new CameraPosition.Builder().target(start).zoom(13.0f).build();
+//                                  CameraUpdate cameraUpdate = CameraUpdateFactory.newCameraPosition(cameraPosition);
+//                                  mMap.animateCamera(cameraUpdate);
+
+                                    }
+
+                                    @Override
+                                    public void onRoutingCancelled() {
+                                        Toast.makeText(HomePageMap.this, "cancelled", Toast.LENGTH_SHORT).show();
+
+                                    }
+                                })
+                                .waypoints(start, end)
+                                .key(getResources().getString(R.string.google_maps_key))
+//                .alternativeRoutes(true)
+                                .build();
+                        routing.execute();
+                    }
+                }
+
+
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
+
+
+    }
+
+    void stopShowingCurrentRides() {
+
+        showRides = false;
+
+        polylines.clear();
+        mMap.clear();
+
+
+    }
+
 
     @SuppressWarnings("StatementWithEmptyBody")
     @Override
@@ -597,7 +788,7 @@ public class HomePageMap extends AppCompatActivity implements OnMapReadyCallback
 
         } else if (id == R.id.messangerMenue) {
             startActivity(new Intent(HomePageMap.this, MainActivity.class));
-finish();
+            finish();
         } else if (id == R.id.contactMenu) {
             Toast.makeText(this, "contactMenu", Toast.LENGTH_SHORT).show();
         } else if (id == R.id.requests) {

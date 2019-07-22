@@ -46,14 +46,14 @@ public class AcceptActivityPart2 extends AppCompatActivity {
     PostAdapter postAdapter;
     ArrayList<PostDriver> postDriverArrayList = new ArrayList<>();
     ArrayList<RequestsModel> requestsModelArrayList = new ArrayList<>();
+    Button startrideforpostbtn;
+    String idfromint;
+    APIService apiService;
     private MyAddedPosts.OnFragmentInteractionListener mListener;
     private RecyclerView recyclerView;
     private DatabaseReference myRef;
     private ArrayList<PostRider> listrider = new ArrayList<>();
     private String type;
-    Button startrideforpostbtn;
-    String idfromint;
-    APIService apiService;
     private String fullname;
 
     @Override
@@ -243,12 +243,12 @@ public class AcceptActivityPart2 extends AppCompatActivity {
 
                                         Intent intent = new Intent(AcceptActivityPart2.this, ShowRouteOnMap.class);
 
-                                        intent.putExtra("latstart",driver.getLatstart());
+                                        intent.putExtra("latstart", driver.getLatstart());
 
-                                        intent.putExtra("latend",driver.getLatend());
-                                        intent.putExtra("lngstart",driver.getLngstart());
-                                        intent.putExtra("lngend",driver.getLngend());
-
+                                        intent.putExtra("latend", driver.getLatend());
+                                        intent.putExtra("lngstart", driver.getLngstart());
+                                        intent.putExtra("lngend", driver.getLngend());
+                                        intent.putExtra("title", "request");
 
 
                                         startActivity(intent);

@@ -1,5 +1,6 @@
 package usama.utech.firebasepractice.AllPostsWork;
 
+import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.widget.Toast;
@@ -13,6 +14,7 @@ import com.ogaclejapan.smarttablayout.utils.v4.FragmentPagerItems;
 
 import usama.utech.firebasepractice.Fragments.ListAllPostsDriver;
 import usama.utech.firebasepractice.Fragments.ListAllPostsRider;
+import usama.utech.firebasepractice.HomePageMap;
 import usama.utech.firebasepractice.R;
 
 public class ListAllPosts extends AppCompatActivity implements
@@ -54,6 +56,13 @@ public class ListAllPosts extends AppCompatActivity implements
             }
         });
 
+    }
+
+    @Override
+    public void onBackPressed() {
+
+        startActivity(new Intent(getApplicationContext(), HomePageMap.class));
+        finish();
     }
 
     @Override

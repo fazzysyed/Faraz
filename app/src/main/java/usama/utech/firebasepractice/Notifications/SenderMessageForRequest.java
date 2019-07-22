@@ -1,11 +1,10 @@
 package usama.utech.firebasepractice.Notifications;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 
 public class SenderMessageForRequest {
-HashMap<String,String> data;
     public String title;
+    HashMap<String, String> data;
 
     public SenderMessageForRequest() {
     }

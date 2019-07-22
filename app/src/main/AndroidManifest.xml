@@ -56,6 +56,7 @@
         <activity android:name=".AllPostsWork.PostYourTravel" />
         <activity android:name=".SignupPageContinueAsDriver" />
         <activity android:name=".SignupPageContinueAsPassenger" />
+        <activity android:name=".PhoneVerify.ActivityPhoneVerify" />
         <activity
             android:name=".SignupPage"
             android:parentActivityName=".LoginPage" />

@@ -3,13 +3,13 @@
     xmlns:android="http://schemas.android.com/apk/res/android">
     <item
         android:id="@+id/navigation_explore"
-        android:icon="@drawable/ic_arrow_forward_white_24dp"
+        android:icon="@drawable/ic_request_list_black_24dp"
         android:title="Explore"
         app:showAsAction="always" />
 
     <item
         android:id="@+id/navigation_profile"
-        android:icon="@drawable/ic_lock_outline_black_24dp"
+        android:icon="@drawable/ic_riding_car"
         android:title="Profile"
         app:showAsAction="always" />
 

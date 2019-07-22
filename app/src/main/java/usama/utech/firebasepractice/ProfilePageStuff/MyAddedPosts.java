@@ -64,7 +64,7 @@ public class MyAddedPosts extends Fragment {
         if (type.equals("driver")) {
             myRef = FirebaseDatabase.getInstance().getReference("PostsAsDriver");
 
-            postAdapter = new PostAdapter(true,getActivity(), postDriverArrayList, listrider,"true");
+            postAdapter = new PostAdapter(true, getActivity(), postDriverArrayList, listrider, "true");
             recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
             recyclerView.setAdapter(postAdapter);
 
@@ -115,7 +115,7 @@ public class MyAddedPosts extends Fragment {
 
             myRef = FirebaseDatabase.getInstance().getReference("PostsAsPassenger");
 
-            postAdapter = new PostAdapter(true,getActivity(), postDriverArrayList, listrider,"true");
+            postAdapter = new PostAdapter(true, getActivity(), postDriverArrayList, listrider, "true");
             recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
             recyclerView.setAdapter(postAdapter);
 

@@ -25,7 +25,7 @@ import usama.utech.firebasepractice.R;
 
 public class ProfilePage extends AppCompatActivity implements
         MySentRequests.OnFragmentInteractionListener,
-        MyAddedPosts.OnFragmentInteractionListener{
+        MyAddedPosts.OnFragmentInteractionListener {
 
 
     CircularImageView circularImageView;

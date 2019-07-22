@@ -39,6 +39,8 @@ import com.karumi.dexter.listener.multi.MultiplePermissionsListener;
 
 import java.util.List;
 
+import usama.utech.firebasepractice.PhoneVerify.ActivityPhoneVerify;
+
 public class LoginPage extends AppCompatActivity {
 
 
@@ -171,7 +173,7 @@ public class LoginPage extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 // Start the Signup activity
-                Intent intent = new Intent(getApplicationContext(), SignupPage.class);
+                Intent intent = new Intent(getApplicationContext(), ActivityPhoneVerify.class);
                 startActivityForResult(intent, REQUEST_SIGNUP);
             }
         });
