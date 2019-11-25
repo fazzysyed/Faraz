@@ -1,52 +1,45 @@
 {
   "project_info": {
-    "project_number": "911848187935",
-    "firebase_url": "https://fir-practice-23293.firebaseio.com",
-    "project_id": "fir-practice-23293",
-    "storage_bucket": "fir-practice-23293.appspot.com"
+    "project_number": "535207573703",
+    "firebase_url": "https://driverhiring-c59ca.firebaseio.com",
+    "project_id": "driverhiring-c59ca",
+    "storage_bucket": "driverhiring-c59ca.appspot.com"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:911848187935:android:8c38a18d219b5355",
+        "mobilesdk_app_id": "1:535207573703:android:fc98039788f1573d96e6e2",
         "android_client_info": {
-          "package_name": "usama.utech.firebasepractice"
+          "package_name": "com.DriverHiring.FYP"
         }
       },
       "oauth_client": [
         {
-          "client_id": "911848187935-95gmd3h48t0qaol01t5qtp1dvtms3lta.apps.googleusercontent.com",
+          "client_id": "535207573703-n54hr07il3rcegsfr9ji227t619up55q.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {
-            "package_name": "usama.utech.firebasepractice",
-            "certificate_hash": "6d6417d67c662600bd862fb5aa14e3c0ac144e9d"
+            "package_name": "com.DriverHiring.FYP",
+            "certificate_hash": "86be04bba3e8bf96d08ea94e17dbbb5587308215"
           }
         },
         {
-          "client_id": "911848187935-9slurs48ck3u2hhcl57ph98dha4ts32m.apps.googleusercontent.com",
+          "client_id": "535207573703-ga3j14n5hm5u8tlinl58da20bf5acdr0.apps.googleusercontent.com",
           "client_type": 3
         }
       ],
       "api_key": [
         {
-          "current_key": "AIzaSyAPraEaV0USdgTlg2KIco-NzgJMRZ6Pj7U"
+          "current_key": "AIzaSyBjhcgPSsnvjJgCU7CSb9iaYiDXvbmZwAY"
         }
       ],
       "services": {
-        "analytics_service": {
-          "status": 1
-        },
         "appinvite_service": {
-          "status": 2,
           "other_platform_oauth_client": [
             {
-              "client_id": "911848187935-9slurs48ck3u2hhcl57ph98dha4ts32m.apps.googleusercontent.com",
+              "client_id": "535207573703-ga3j14n5hm5u8tlinl58da20bf5acdr0.apps.googleusercontent.com",
               "client_type": 3
             }
           ]
-        },
-        "ads_service": {
-          "status": 2
         }
       }
     }
